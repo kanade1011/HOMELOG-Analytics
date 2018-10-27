@@ -8,6 +8,8 @@ import requests
 import dotenv
 from bs4 import BeautifulSoup
 
+dotenv.load_dotenv(verbose=True)
+
 def login_to_homelog():
     url = os.environ.get("URL")
     login_url = os.environ.get("LOGIN_URL")
