@@ -1,1 +1,1 @@
-"# badge_getter_batch"  
+# badge_getter_batch
