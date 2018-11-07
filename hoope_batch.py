@@ -1,8 +1,4 @@
-'''
-Created on 2018/10/27
 
-@author: Administrator
-'''
 from bs4 import BeautifulSoup
 import calendar
 from collections import Counter
