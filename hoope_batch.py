@@ -4,6 +4,7 @@ Created on 2018/10/27
 @author: Administrator
 '''
 from bs4 import BeautifulSoup
+import calendar
 from collections import Counter
 import datetime
 import dotenv
@@ -17,6 +18,7 @@ from pandas.tests.io.parser import usecols
 import officials
 
 dotenv.load_dotenv(verbose=True)
+today = datetime.date.today()
 
 
 def login_to_homelog():
@@ -43,9 +45,15 @@ def login_to_homelog():
 
 def get_csv(session):
     datasheet = os.environ.get('DATA_URL')
+    base_calender = "%s/%d" % (today.year, today.month-1)
+    date_from = '%s/01' % base_calender
+    print(date_from)
+    _, end_month = calendar.monthrange(today.year, today.month-1)
+    date_to = '%s/%d' % (base_calender, end_month)
+    print(date_to)
     sheet_payload = {
-        'csv[date_from]': '2018/10/01',
-        'csv[date_to]': '2018/10/31',
+        'csv[date_from]': date_from,
+        'csv[date_to]': date_to,
         'csv[badge_id]': ''
     }
     response = session.get(datasheet, data=sheet_payload)
@@ -57,7 +65,7 @@ def get_csv(session):
     file_name = contentDisposition[contentDisposition.find(attribute) +
                                   len(attribute):].replace('\"', '')
 
-    save_file_name = datetime.datetime.now().strftime('%Y%m%d') + file_name
+    save_file_name = today.strftime('%Y%m%d') + file_name
     save_file_path = os.path.join(os.getcwd(), "Data", file_name)
     with open(save_file_path, 'wb') as saveFile:
         saveFile.write(response.content)
