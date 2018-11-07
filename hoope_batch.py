@@ -3,32 +3,32 @@ Created on 2018/10/27
 
 @author: Administrator
 '''
-import os
-import codecs
-import datetime
-import requests
-import dotenv
-import pandas
-import numpy
-from collections import Counter
 from bs4 import BeautifulSoup
+from collections import Counter
+import datetime
+import dotenv
+import numpy
+import os
+import requests
+
+import pandas
 from pandas.tests.io.parser import usecols
+
 import officials
-from idlelib.iomenu import encoding
 
 dotenv.load_dotenv(verbose=True)
 
 
 def login_to_homelog():
-    url = os.environ.get("URL")
-    login_url = os.environ.get("LOGIN_URL")
-    user_id = os.environ.get("USER_ID")
-    password = os.environ.get("PASSWORD")
+    url = os.environ.get('URL')
+    login_url = os.environ.get('LOGIN_URL')
+    user_id = os.environ.get('USER_ID')
+    password = os.environ.get('PASSWORD')
 
     login_payload = {
-        "utf-8": "✓",
-        "admin_admin_user[email]": user_id,
-        "admin_admin_user[password]": password
+        'utf-8': '✓',
+        'admin_admin_user[email]': user_id,
+        'admin_admin_user[password]': password
     }
 
     session = requests.Session()
@@ -42,11 +42,11 @@ def login_to_homelog():
 
 
 def get_csv(session):
-    datasheet = os.environ.get("DATA_URL")
+    datasheet = os.environ.get('DATA_URL')
     sheet_payload = {
-        "csv[date_from]": "2018/10/01",
-        'csv[date_to]': "2018/10/31",
-        "csv[badge_id]": ""
+        'csv[date_from]': '2018/10/01',
+        'csv[date_to]': '2018/10/31',
+        'csv[badge_id]': ''
     }
     response = session.get(datasheet, data=sheet_payload)
     print(response.status_code)
@@ -55,35 +55,28 @@ def get_csv(session):
     contentDisposition = response.headers['Content-Disposition']
     ATTRIBUTE = 'filename='
     fileName = contentDisposition[contentDisposition.find(ATTRIBUTE) +
-                                  len(ATTRIBUTE):].replace('\"', "")
+                                  len(ATTRIBUTE):].replace('\'', '')
 
-    saveFileName = datetime.datetime.now().strftime("%Y%m%d") + fileName
-    #     print(saveFileName)
-    saveFilePath = "C:\Program Files (x86)\pleiades\workspace\hoope_batch\Data\CP932\%s" % saveFileName
-    #     print(saveFilePath)
+    saveFileName = datetime.datetime.now().strftime('%Y%m%d') + fileName
+    saveFilePath = 'C:\Program Files (x86)\pleiades\workspace\hoope_batch\Data\CP932\%s' % saveFileName
     with open(saveFilePath, 'wb') as saveFile:
         saveFile.write(response.content)
     return saveFilePath
 
 
 def extract_sender(source_file):
-    with open(source_file, "r", encoding="CP932") as fin:
+    with open(source_file, 'r', encoding='CP932') as fin:
         reader = pandas.read_csv(fin, usecols=[1])
-        #         print(type(reader.values))
         processed_list = numpy.ravel(reader.values)
         counter = Counter(processed_list)
         num_list = {}
         for word, cnt in counter.most_common():
             num_list[word] = cnt
-
-
-#         print(num_list)
         return num_list
 
 
 def count_officials_sending(sending_dict):
     official_list = officials.namelist
-    #print(official_list)
     officials_send_counter = {}
     for person in official_list:
         try:
@@ -94,9 +87,9 @@ def count_officials_sending(sending_dict):
 
 
 if __name__ == '__main__':
-    print("start")
+    print('start')
     session = login_to_homelog()
     source_file = get_csv(session)
     sending_dict = extract_sender(source_file)
     count_officials_sending(sending_dict)
-    print("end")
+    print('end')
