@@ -53,15 +53,15 @@ def get_csv(session):
 
     contentType = response.headers['Content-Type']
     contentDisposition = response.headers['Content-Disposition']
-    ATTRIBUTE = 'filename='
-    fileName = contentDisposition[contentDisposition.find(ATTRIBUTE) +
-                                  len(ATTRIBUTE):].replace('\'', '')
+    attribute = 'filename='
+    file_name = contentDisposition[contentDisposition.find(attribute) +
+                                  len(attribute):].replace('\"', '')
 
-    saveFileName = datetime.datetime.now().strftime('%Y%m%d') + fileName
-    saveFilePath = 'C:\Program Files (x86)\pleiades\workspace\hoope_batch\Data\CP932\%s' % saveFileName
-    with open(saveFilePath, 'wb') as saveFile:
+    save_file_name = datetime.datetime.now().strftime('%Y%m%d') + file_name
+    save_file_path = os.path.join(os.getcwd(), "Data", file_name)
+    with open(save_file_path, 'wb') as saveFile:
         saveFile.write(response.content)
-    return saveFilePath
+    return save_file_path
 
 
 def extract_sender(source_file):
