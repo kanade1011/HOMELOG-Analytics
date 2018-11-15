@@ -13,6 +13,15 @@ dotenv.load_dotenv(verbose=True)
 today = datetime.date.today()
 
 
+def create_collection():
+    session = login_to_homelog()
+    source_file = get_csv(session)
+    sending_dict = extract_sender(source_file)
+    result_dict = count_officials_sending(sending_dict)
+    result_for_sending = {'month': '%d' % (today.month-1), 'body': result_dict}
+    return result_for_sending
+
+
 def login_to_homelog():
     url = os.environ.get('URL')
     login_url = os.environ.get('LOGIN_URL')
@@ -83,7 +92,7 @@ def count_officials_sending(sending_dict):
             officials_send_counter[person] = sending_dict[person]
         except:
             officials_send_counter[person] = 0
-    print(officials_send_counter)
+    return(officials_send_counter)
 
 
 if __name__ == '__main__':
