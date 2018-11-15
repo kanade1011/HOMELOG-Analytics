@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, Blueprint
+from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
-from api import register
+from api import register, result_getter
 
 app = Flask(__name__)
-app.register_blueprint(register.register)
+modules_define = [register.register, result_getter.api]
+for applicaton in modules_define:
+    app.register_blueprint(applicaton)
 
 @app.route('/')
 def index():
@@ -18,8 +20,7 @@ def post():
         # リクエストフォームから「名前」を取得して
         name = request.form['name']
         # index.html をレンダリングする
-        return render_template('index.html',
-                               name=name)
+        return render_template('index.html')
     else:
         # エラーなどでリダイレクトしたい場合はこんな感じで
         return redirect(url_for('index'))
@@ -31,11 +32,6 @@ def create_collection():
     collection = db['analytic_database']
     return collection
 
-
-# collection.insert_one(post)
-#
-# record = collection.find_one({"month": "10"})
-# print(record['body'])
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

@@ -52,7 +52,7 @@ def login_to_homelog():
     auth_token = soup.find(attrs={'name': 'authenticity_token'}).get('value')
     login_payload['authenticity_token'] = auth_token
 
-    response = session.post(login_url, data=login_payload)
+    session.post(login_url, data=login_payload)
     return session
 
 
