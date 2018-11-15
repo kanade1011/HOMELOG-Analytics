@@ -1,3 +1,4 @@
+from flask import Blueprint
 from bs4 import BeautifulSoup
 import calendar
 from collections import Counter
@@ -6,20 +7,31 @@ import numpy
 import os
 import requests
 import dotenv
+from pymongo import MongoClient
 import pandas
 import officials
 
 dotenv.load_dotenv(verbose=True)
 today = datetime.date.today()
+register = Blueprint("register", __name__, url_prefix="/register")
 
 
 def create_collection():
+    client = MongoClient('localhost', 27017)
+    db = client['analytic_database']
+    collection = db['analytic_database']
+    return collection
+
+
+@register.route('/register')
+def insert_collection():
     session = login_to_homelog()
     source_file = get_csv(session)
     sending_dict = extract_sender(source_file)
     result_dict = count_officials_sending(sending_dict)
     result_for_sending = {'month': '%d' % (today.month-1), 'body': result_dict}
-    return result_for_sending
+    create_collection().insert_one(result_for_sending)
+    return "completed"
 
 
 def login_to_homelog():
