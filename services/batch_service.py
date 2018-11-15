@@ -1,16 +1,12 @@
-
 from bs4 import BeautifulSoup
 import calendar
 from collections import Counter
 import datetime
-import dotenv
 import numpy
 import os
 import requests
-
+import dotenv
 import pandas
-from pandas.tests.io.parser import usecols
-
 import officials
 
 dotenv.load_dotenv(verbose=True)
@@ -61,10 +57,10 @@ def get_csv(session):
     file_name = contentDisposition[contentDisposition.find(attribute) +
                                   len(attribute):].replace('\"', '')
 
-    save_file_name = today.strftime('%Y%m%d') + file_name
+    save_file_name = today.strftime('%Y%m') + file_name
     save_file_path = os.path.join(os.getcwd(), "Data", file_name)
-    with open(save_file_path, 'wb') as saveFile:
-        saveFile.write(response.content)
+    with open(save_file_path, 'wb') as save_file_name:
+        save_file_name.write(response.content)
     return save_file_path
 
 
