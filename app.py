@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
 from api import register, result_getter
+from view import view
 
 app = Flask(__name__)
-modules_define = [register.register, result_getter.api]
+modules_define = [register.register, result_getter.api, view.view]
 for applicaton in modules_define:
     app.register_blueprint(applicaton)
 

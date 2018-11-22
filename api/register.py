@@ -6,6 +6,7 @@ import datetime
 import numpy
 import os
 import requests
+import tempfile
 import dotenv
 from pymongo import MongoClient
 import pandas
@@ -23,7 +24,7 @@ def create_collection():
     return collection
 
 
-@register.route('/register')
+@register.route('/')
 def insert_collection():
     session = login_to_homelog()
     source_file = get_csv(session)
@@ -72,17 +73,20 @@ def get_csv(session):
     response = session.get(datasheet, data=sheet_payload)
     print(response.status_code)
 
-    contentType = response.headers['Content-Type']
     contentDisposition = response.headers['Content-Disposition']
     attribute = 'filename='
     file_name = contentDisposition[contentDisposition.find(attribute) +
                                   len(attribute):].replace('\"', '')
+    save_path = os.path.join(os.getcwd(), "Data", file_name)
 
-    save_file_name = today.strftime('%Y%m') + file_name
-    save_file_path = os.path.join(os.getcwd(), "Data", file_name)
-    with open(save_file_path, 'wb') as save_file_name:
+    # save_path = tempfile.NamedTemporaryFile(mode='w', suffix='.csv')
+    with open(save_path, 'wb') as save_file_name:
         save_file_name.write(response.content)
-    return save_file_path
+    return save_path
+    # fin = tempfile.mkstemp()
+    # fin.write(response.content)
+    # print(fin.name)
+    # return fin.name
 
 
 def extract_sender(source_file):
@@ -109,8 +113,5 @@ def count_officials_sending(sending_dict):
 
 if __name__ == '__main__':
     print('start')
-    session = login_to_homelog()
-    source_file = get_csv(session)
-    sending_dict = extract_sender(source_file)
-    count_officials_sending(sending_dict)
+    insert_collection()
     print('end')

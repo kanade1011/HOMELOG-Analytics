@@ -17,5 +17,5 @@ collection = create_collection()
 
 @api.route('/<month>')
 def result_getter(month=None):
-    record = collection.find_one({"month": month})
+    record = collection.find_one({"month": str(month)})
     return str(record['body'])
