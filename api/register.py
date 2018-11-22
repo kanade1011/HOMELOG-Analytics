@@ -39,6 +39,20 @@ def insert_collection():
     return ("completed: %s" % result_for_sending)
 
 
+@register.route('/updata/<month>')
+def updata_collection(month=None):
+    session = login_to_homelog()
+    source_file = get_csv(session)
+    sending_dict = extract_sender(source_file)
+    result_dict = count_officials_sending(sending_dict)
+    create_collection().remove({'month': str(month)})
+    create_collection().insert_one({'month': str(month), 'body': result_dict})
+    record = create_collection().find_one({"month": str(month)})
+    print(record)
+    # print(result_for_sending)
+    return ("updata completed: %s"%record)
+
+
 def login_to_homelog():
     url = os.environ.get('URL')
     login_url = os.environ.get('LOGIN_URL')
@@ -61,12 +75,13 @@ def login_to_homelog():
     return session
 
 
-def get_csv(session):
+def get_csv(session, month=None):
+    month = month or today.month-1
     datasheet = os.environ.get('DATA_URL')
-    base_calender = "%s/%d" % (today.year, today.month-1)
+    base_calender = "%s/%d" % (today.year, month)
     date_from = '%s/01' % base_calender
     print(date_from)
-    _, end_month = calendar.monthrange(today.year, today.month-1)
+    _, end_month = calendar.monthrange(today.year, month)
     date_to = '%s/%d' % (base_calender, end_month)
     print(date_to)
     sheet_payload = {
