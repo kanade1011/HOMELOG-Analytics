@@ -12,8 +12,9 @@
         <div class="row">
           <div class="col-md-12">
             <div class="lead">
+              <span>result</span>
               {% for person in result %}
-                <p>name: {{person}}</p>
+                <p>name: {{person.name}}  count: {{person.count}}</p>
               {% endfor %}
             </div>
           </div>

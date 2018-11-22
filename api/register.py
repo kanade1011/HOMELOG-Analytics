@@ -5,8 +5,8 @@ from collections import Counter
 import datetime
 import numpy
 import os
+import json
 import requests
-import tempfile
 import dotenv
 from pymongo import MongoClient
 import pandas
@@ -32,7 +32,11 @@ def insert_collection():
     result_dict = count_officials_sending(sending_dict)
     result_for_sending = {'month': '%d' % (today.month-1), 'body': result_dict}
     create_collection().insert_one(result_for_sending)
-    return "completed"
+    # create_collection().remove({'month': "10"})
+    record = create_collection().find_one({"month": str(10)})
+    print(record)
+    # print(result_for_sending)
+    return ("completed: %s" % result_for_sending)
 
 
 def login_to_homelog():
@@ -96,19 +100,27 @@ def extract_sender(source_file):
         counter = Counter(processed_list)
         num_list = {}
         for word, cnt in counter.most_common():
+            # print("word:%s, cnt:%s" % (word, cnt))
             num_list[word] = cnt
+            # print(num_list)
         return num_list
 
 
 def count_officials_sending(sending_dict):
     official_list = officials.namelist
-    officials_send_counter = {}
+    officials_send_count_dict = []
     for person in official_list:
+        tmp = {}
         try:
-            officials_send_counter[person] = sending_dict[person]
+            tmp["name"] = person
+            tmp["count"] = sending_dict[person]
+            officials_send_count_dict.append(tmp)
+            # officials_send_count_dict[person] = sending_dict[person]
         except:
-            officials_send_counter[person] = 0
-    return(officials_send_counter)
+            # officials_send_count_dict[person] = 0
+            pass
+    # print(officials_send_count_dict)
+    return(officials_send_count_dict)
 
 
 if __name__ == '__main__':
