@@ -7,7 +7,7 @@ today = datetime.date.today()
 
 
 @view.route('/<specified_month>')
-def view_month_summry(specified_month=None):
+def view_month_summary(specified_month=None):
     month = specified_month or '%s' % (today.month - 1)
     result = result_getter.result_getter(month=month)
     print(result)
@@ -15,7 +15,7 @@ def view_month_summry(specified_month=None):
 
 
 @view.route('/')
-def view_this_month_summry():
+def view_this_month_summary():
     month = '%s' % (today.month - 1)
     result = result_getter.result_getter(month=month)
     print(result)
@@ -23,4 +23,4 @@ def view_this_month_summry():
 
 
 if __name__ == '__main__':
-    view_month_summry()
+    view_month_summary()
