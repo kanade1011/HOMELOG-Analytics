@@ -4,7 +4,7 @@ import datetime
 import officials
 from api import result_getter
 
-view = Blueprint("view", __name__, url_prefix="/")
+view = Blueprint("view", __name__, url_prefix="https://homelog-analytics.herokuapp.com/")
 today = datetime.date.today()
 users = os.environ.get("ADMIN")
 
