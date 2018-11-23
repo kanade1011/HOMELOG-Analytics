@@ -1,13 +1,24 @@
 from flask import Blueprint, render_template
+from flask_httpauth import HTTPBasicAuth
 import datetime
 import officials
 from api import result_getter
+import admin
 
 view = Blueprint("view", __name__, url_prefix="/")
 today = datetime.date.today()
+auth = HTTPBasicAuth()
+
+
+@auth.get_password
+def get_pw(username):
+    if username in admin.users:
+        return admin.users.get(username)
+    return None
 
 
 @view.route('/')
+@auth.login_required
 def view_index():
     title = 'homelog analytics'
     official_list = officials.namelist
