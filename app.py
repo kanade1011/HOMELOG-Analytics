@@ -9,11 +9,11 @@ modules_define = [register.register, result_getter.api, view.view]
 for applicaton in modules_define:
     app.register_blueprint(applicaton)
 
+
 @app.route('/')
 def index():
     title = "index"
     str = "foo"
-    print("hoge")
     return render_template('index.html', str=str, title=title)
 
 

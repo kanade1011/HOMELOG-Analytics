@@ -12,10 +12,17 @@
         <div class="row">
           <div class="col-md-12">
             <div class="lead">
-              <span>result</span>
+              <span>{{month}}月の送信数</span>
+              <table>
+                <tr>
+                  <th>Name</th><th>Badge</th>
+                </tr>
               {% for person in result %}
-                <p>name: {{person.name}}  count: {{person.count}}</p>
+                <tr>
+                  <td>{{person.name}}</td><td>{{person.count}}</td>
+                </tr>
               {% endfor %}
+              </table>
             </div>
           </div>
         </div>
