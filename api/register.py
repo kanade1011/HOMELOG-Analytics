@@ -5,8 +5,8 @@ from collections import Counter
 import datetime
 import numpy
 import os
-import json
 import requests
+from flask import render_template
 import dotenv
 from pymongo import MongoClient
 import pandas
@@ -36,7 +36,7 @@ def insert_collection():
     record = create_collection().find_one({"month": str(10)})
     print(record)
     # print(result_for_sending)
-    return ("completed: %s" % result_for_sending)
+    return render_template('index.html')
 
 
 @register.route('/updata/<month>')
@@ -50,7 +50,8 @@ def updata_collection(month=None):
     record = create_collection().find_one({"month": str(month)})
     print(record)
     # print(result_for_sending)
-    return ("updata completed: %s"%record)
+    # return ("updata completed: %s"%record)
+    return render_template('index.html')
 
 
 def login_to_homelog():

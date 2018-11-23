@@ -10,13 +10,6 @@ for applicaton in modules_define:
     app.register_blueprint(applicaton)
 
 
-@app.route('/')
-def index():
-    title = "index"
-    str = "foo"
-    return render_template('index.html', str=str, title=title)
-
-
 @app.route('/post', methods=['GET', 'POST'])
 def post():
     if request.method == 'POST':
