@@ -19,3 +19,13 @@ collection = create_collection()
 def result_getter(month=None):
     record = collection.find_one({"month": str(month)})
     return record['body']
+
+
+def person_getter():
+    person = "岡野 剛"
+    record = collection.find_one({"name": person})
+    print(record)
+
+
+if __name__ == '__main__':
+    person_getter()

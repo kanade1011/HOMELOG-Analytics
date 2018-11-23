@@ -42,7 +42,7 @@ def insert_collection():
 @register.route('/updata/<month>')
 def updata_collection(month=None):
     session = login_to_homelog()
-    source_file = get_csv(session)
+    source_file = get_csv(session, month=int(month))
     sending_dict = extract_sender(source_file)
     result_dict = count_officials_sending(sending_dict)
     create_collection().remove({'month': str(month)})
@@ -92,20 +92,15 @@ def get_csv(session, month=None):
     response = session.get(datasheet, data=sheet_payload)
     print(response.status_code)
 
-    contentDisposition = response.headers['Content-Disposition']
+    content_disposition = response.headers['Content-Disposition']
     attribute = 'filename='
-    file_name = contentDisposition[contentDisposition.find(attribute) +
+    file_name = content_disposition[content_disposition.find(attribute) +
                                   len(attribute):].replace('\"', '')
     save_path = os.path.join(os.getcwd(), "Data", file_name)
 
-    # save_path = tempfile.NamedTemporaryFile(mode='w', suffix='.csv')
     with open(save_path, 'wb') as save_file_name:
         save_file_name.write(response.content)
     return save_path
-    # fin = tempfile.mkstemp()
-    # fin.write(response.content)
-    # print(fin.name)
-    # return fin.name
 
 
 def extract_sender(source_file):
@@ -115,9 +110,7 @@ def extract_sender(source_file):
         counter = Counter(processed_list)
         num_list = {}
         for word, cnt in counter.most_common():
-            # print("word:%s, cnt:%s" % (word, cnt))
             num_list[word] = cnt
-            # print(num_list)
         return num_list
 
 
@@ -130,11 +123,10 @@ def count_officials_sending(sending_dict):
             tmp["name"] = person
             tmp["count"] = sending_dict[person]
             officials_send_count_dict.append(tmp)
-            # officials_send_count_dict[person] = sending_dict[person]
         except:
-            # officials_send_count_dict[person] = 0
-            pass
-    # print(officials_send_count_dict)
+            tmp["name"] = person
+            tmp["count"] = 0
+            officials_send_count_dict.append(tmp)
     return(officials_send_count_dict)
 
 
