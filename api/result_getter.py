@@ -1,13 +1,19 @@
 from flask import Blueprint
 from pymongo import MongoClient
+import os
 import officials
 
 api = Blueprint("result_getter", __name__, url_prefix="/api")
 
 
 def create_collection():
-    client = MongoClient('localhost', 27017)
-    db = client['analytic_database']
+    MONGO_URL = os.environ.get('MONGOHQ_URL')
+    if MONGO_URL:
+        client = MongoClient(MONGO_URL)
+        db = client['analytic_database']
+    else:
+        client = MongoClient('localhost', 27017)
+        db = client['analytic_database']
     collection = db['analytic_database']
     return collection
 
