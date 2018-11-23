@@ -1,12 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_httpauth import HTTPBasicAuth
 from pymongo import MongoClient
 from api import register, result_getter
 from view import view
 
 app = Flask(__name__)
 app.config.update({'DEBUG': True})
-auth = HTTPBasicAuth()
 modules_define = [register.register, result_getter.api, view.view]
 for applicaton in modules_define:
     app.register_blueprint(applicaton)
