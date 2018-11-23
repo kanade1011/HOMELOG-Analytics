@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+      <title>{{ person }}さんの送信数</title>
+  </head>
+  <body>
+  {% block content %}
+  <!-- Form
+  ================================================== -->
+    <div class="form">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="lead">
+              <span>{{ person }}さんの送信数</span>
+              <table>
+                <tr>
+                  <th>Month</th><th>Badge</th>
+                </tr>
+              {% for personal in result %}
+                <tr>
+                  <td>{{personal.month}}</td><td>{{personal.badge}}</td>
+                </tr>
+              {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>

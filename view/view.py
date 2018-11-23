@@ -22,5 +22,15 @@ def view_this_month_summary():
     return render_template('month_summry.html', result=result, month=month)
 
 
+@view.route('/person/<person>')
+def view_personal_sending(person=None):
+    person = person or '小澤 健治'
+    result = result_getter.person_record_getter(person=person)
+    print(result)
+    return render_template(
+        'personal_summary.html', result=result, person=person)
+
+
 if __name__ == '__main__':
-    view_month_summary()
+    # view_month_summary()
+    view_personal_sending()
