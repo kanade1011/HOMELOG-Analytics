@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 import datetime
+import officials
 from api import result_getter
 
 view = Blueprint("view", __name__, url_prefix="/")
@@ -9,7 +10,9 @@ today = datetime.date.today()
 @view.route('/')
 def view_index():
     title = 'homelog analytics'
-    return render_template('index.html', title=title)
+    official_list = officials.namelist
+    month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    return render_template('index.html', title=title, list=official_list, year=month_list)
 
 
 @view.route('/result/<specified_month>')
@@ -28,7 +31,7 @@ def view_this_month_summary():
     return render_template('month_summry.html', result=result, month=month)
 
 
-@view.route('/result/person/<person>', methods=['POST'])
+@view.route('/result/person/<person>')
 def view_personal_sending(person=None):
     person = person or '小澤 健治'
     result = result_getter.person_record_getter(person=person)

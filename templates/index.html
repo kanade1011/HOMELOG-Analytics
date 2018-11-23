@@ -5,8 +5,36 @@
   </head>
   <body>
   {% block content %}
-  <a href="/result">最新の結果を表示する</a>
-  <a href="/register">最新の結果を取得する</a>
+  <div>
+    <form NAME="form1">
+      <select NAME="select1" onChange="if(document.form1.select1.value){location.href=document.form1.select1.value;}">
+        <option> ▼ データを表示する月を選択してください　</option>
+        {% for month in year %}
+          <option value="/result/{{month}}">{{month}}月</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <div><form NAME="form2">
+    <select NAME="select2" onChange="if(document.form2.select2.value){location.href=document.form2.select2.value;}">
+      <option> ▼ データを表示する人物を選択してください　</option>
+      {% for person in list %}
+        <option value="/result/person/{{person}}">{{person}}</option>
+      {% endfor %}
+    </select>
+  </form></div>
+
+  <div><form NAME="form3">
+    <select NAME="select3" onChange="if(document.form3.select3.value){location.href=document.form3.select3.value;}">
+      <option> ▼ データを更新する月を選択してください　</option>
+      {% for month in year %}
+          <option value="/register/updata/{{month}}">{{month}}月</option>
+      {% endfor %}
+    </select>
+  </form></div>
+  <div><a href="/register">前月の結果を取得する</a></div>
+
+  <a href="/">home</a>
   {% endblock %}
   </body>
 </html>

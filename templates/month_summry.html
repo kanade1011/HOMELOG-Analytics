@@ -9,24 +9,19 @@
   ================================================== -->
     <div class="form">
       <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="lead">
-              <span>{{month}}月の送信数</span>
-              <table>
-                <tr>
-                  <th>Name</th><th>Badge</th>
-                </tr>
-              {% for person in result %}
-                <tr>
-                  <td>{{person.name}}</td><td>{{person.count}}</td>
-                </tr>
-              {% endfor %}
-              </table>
-            </div>
-          </div>
-        </div>
+        <span>{{month}}月の送信数</span>
+        <table>
+          <tr>
+            <th>Name</th><th>Badge</th>
+          </tr>
+        {% for person in result %}
+          <tr>
+            <td>{{person.name}}</td><td>{{person.count}}</td>
+          </tr>
+        {% endfor %}
+        </table>
       </div>
+      <a href="/">home</a>
     </div>
     {% endblock %}
   </body>
