@@ -31,7 +31,7 @@ def view_month_summary(specified_month=None):
     month = specified_month or '%s' % (today.month - 1)
     result = result_getter.result_getter(month=month)
     print(result)
-    return render_template('month_summry.html', result=result, month=month)
+    return render_template('month_summary.html', result=result, month=month)
 
 
 @view.route('/result')
@@ -39,7 +39,7 @@ def view_this_month_summary():
     month = '%s' % (today.month - 1)
     result = result_getter.result_getter(month=month)
     print(result)
-    return render_template('month_summry.html', result=result, month=month)
+    return render_template('month_summary.html', result=result, month=month)
 
 
 @view.route('/result/person/<person>')
