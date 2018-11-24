@@ -5,8 +5,6 @@
   </head>
   <body>
   {% block content %}
-  <!-- Form
-  ================================================== -->
     <div class="form">
       <div class="container">
         <span>{{month}}月の送信数</span>
@@ -20,6 +18,59 @@
           </tr>
         {% endfor %}
         </table>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+        <canvas id="ChartDemo" width="600" height="200"></canvas>
+          <script>
+            var persons={{result|tojson}};
+            var ctx = document.getElementById("ChartDemo").getContext('2d');
+            var ChartDemo = new Chart(ctx, {
+               type: 'bar',
+               data: {
+                  labels: [
+                    persons[0].name, persons[1].name, persons[2].name,
+                    persons[3].name, persons[4].name, persons[5].name,
+                    persons[6].name, persons[7].name, persons[8].name,
+                    persons[9].name, persons[10].name, persons[11].name,
+                    persons[12].name, persons[13].name, persons[14].name,
+                    persons[15].name, persons[16].name, persons[17].name,
+                    persons[18].name, persons[19].name, persons[20].name,
+                    persons[21].name, persons[22].name, persons[23].name,
+                    persons[24].name, persons[25].name, persons[26].name,
+                            ],
+                  datasets: [
+                  {
+                     label: "Badge",
+                     borderColor: 'rgb(255, 0, 0)',
+                     lineTension: 0, //<===追加
+                     fill: false,    //<===追加
+                     data: [
+                    persons[0].count, persons[1].count, persons[2].count,
+                    persons[3].count, persons[4].count, persons[5].count,
+                    persons[6].count, persons[7].count, persons[8].count,
+                    persons[9].count, persons[10].count, persons[11].count,
+                    persons[12].count, persons[13].count, persons[14].count,
+                    persons[15].count, persons[16].count, persons[17].count,
+                    persons[18].count, persons[19].count, persons[20].count,
+                    persons[21].count, persons[22].count, persons[23].count,
+                    persons[24].count, persons[25].count, persons[26].count,
+                            ],
+                  },
+                  ]
+               },
+               options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    type: 'linear',
+                    ticks: {
+                      beginAtZero: true,
+                      max: 100
+                    }
+                  }]
+                },
+              }
+             })
+          </script>
       </div>
       <a href="/">home</a>
     </div>
