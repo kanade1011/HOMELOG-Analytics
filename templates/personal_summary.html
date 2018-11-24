@@ -5,9 +5,6 @@
   </head>
   <body>
   {% block content %}
-  <!-- Form
-  ================================================== -->
-    <div class="form">
       <div class="container">
         <span>{{ person }}さんの送信数</span>
         <table>
@@ -20,8 +17,43 @@
           </tr>
         {% endfor %}
         </table>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+        <canvas id="ChartDemo" width="300" height="200"></canvas>
+          <script>
+            var person = {{ person|tojson }};
+            var data = {{ result|tojson }};
+            var ctx = document.getElementById("ChartDemo").getContext('2d');
+            var ChartDemo = new Chart(ctx, {
+               type: 'line',
+               data: {
+                  labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                  datasets: [
+                  {
+                     label: person,
+                     borderColor: 'rgb(255, 0, 0)',
+                     lineTension: 0, //<===追加
+                     fill: false,    //<===追加
+                     data: [data[0].badge, data[1].badge, data[2].badge, data[3].badge,
+                            data[4].badge, data[5].badge, data[6].badge, data[7].badge,
+                            data[8].badge, data[9].badge, data[10].badge, data[11].badge, ],
+                  },
+                  ]
+               },
+               options: {
+                responsive: true,
+                scales: {
+                  yAxes: [{
+                    type: 'linear',
+                    ticks: {
+                      beginAtZero: true,
+                      max: 100
+                    }
+                  }]
+                },
+              }
+             })
+          </script>
       </div>
-    </div>
     <a href="/">home</a>
     {% endblock %}
   </body>
