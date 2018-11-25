@@ -11,6 +11,11 @@
           <script>
             var persons={{result|tojson}};
             var ctx = document.getElementById("ChartDemo").getContext('2d');
+            const colorList=["aqua","blue","fuchsia","gray","green","lime","maroon","navy",
+                              "purple","red","teal","yellow","DarkCyan","DarkSalmon",
+                              "DarkTurquoise","DeepPink","ForestGreen","Gold","GreenYellow",
+                              "LightBlue","LightGreen","LightSeaGreen","LimeGreen",
+                              "MediumAquaMarine","MediumBlue","MediumSpringGreen"];
             var ChartDemo = new Chart(ctx, {
                type: 'line',
                data: {
@@ -18,6 +23,7 @@
                   datasets: [
                   {
                      label: persons[0][0].Name,
+                     borderColor: colorList[0],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -28,6 +34,7 @@
                             ],
                   },{
                      label: persons[1][0].Name,
+                     borderColor: colorList[1],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -38,6 +45,7 @@
                             ],
                   },{
                      label: persons[2][0].Name,
+                     borderColor: colorList[2],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -48,6 +56,7 @@
                             ],
                   },{
                      label: persons[3][0].Name,
+                     borderColor: colorList[3],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -58,6 +67,7 @@
                             ],
                   },{
                      label: persons[4][0].Name,
+                     borderColor: colorList[4],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -68,6 +78,7 @@
                             ],
                   },{
                      label: persons[5][0].Name,
+                     borderColor: colorList[5],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -78,6 +89,7 @@
                             ],
                   },{
                      label: persons[6][0].Name,
+                     borderColor: colorList[6],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -88,6 +100,7 @@
                             ],
                   },{
                      label: persons[7][0].Name,
+                     borderColor: colorList[7],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -98,6 +111,7 @@
                             ],
                   },{
                      label: persons[8][0].Name,
+                     borderColor: colorList[8],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -108,6 +122,7 @@
                             ],
                   },{
                      label: persons[9][0].Name,
+                     borderColor: colorList[9],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -118,6 +133,7 @@
                             ],
                   },{
                      label: persons[10][0].Name,
+                     borderColor: colorList[10],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -128,6 +144,7 @@
                             ],
                   },{
                      label: persons[11][0].Name,
+                     borderColor: colorList[11],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -138,6 +155,7 @@
                             ],
                   },{
                      label: persons[12][0].Name,
+                     borderColor: colorList[12],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -148,6 +166,7 @@
                             ],
                   },{
                      label: persons[13][0].Name,
+                     borderColor: colorList[13],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -158,6 +177,7 @@
                             ],
                   },{
                      label: persons[14][0].Name,
+                     borderColor: colorList[14],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -169,6 +189,7 @@
                   },{
                      label: persons[15][0].Name,
                      lineTension: 0, //<===追加
+                     borderColor: colorList[15],
                      fill: false,    //<===追加
                      data: [
                       persons[15][1].badge,persons[15][2].badge,persons[15][3].badge,
@@ -178,6 +199,7 @@
                             ],
                   },{
                      label: persons[16][0].Name,
+                     borderColor: colorList[16],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -188,6 +210,7 @@
                             ],
                   },{
                      label: persons[17][0].Name,
+                     borderColor: colorList[17],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -198,6 +221,7 @@
                             ],
                   },{
                      label: persons[18][0].Name,
+                     borderColor: colorList[18],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -208,6 +232,7 @@
                             ],
                   },{
                      label: persons[19][0].Name,
+                     borderColor: colorList[19],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -218,6 +243,7 @@
                             ],
                   },{
                      label: persons[20][0].Name,
+                     borderColor: colorList[20],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -228,6 +254,7 @@
                             ],
                   },{
                      label: persons[21][0].Name,
+                     borderColor: colorList[21],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -238,6 +265,7 @@
                             ],
                   },{
                      label: persons[22][0].Name,
+                     borderColor: colorList[22],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -248,6 +276,7 @@
                             ],
                   },{
                      label: persons[23][0].Name,
+                     borderColor: colorList[23],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -258,6 +287,7 @@
                             ],
                   },{
                      label: persons[24][0].Name,
+                     borderColor: colorList[24],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -268,6 +298,7 @@
                             ],
                   },{
                      label: persons[25][0].Name,
+                     borderColor: colorList[25],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
@@ -278,6 +309,7 @@
                             ],
                   },{
                      label: persons[26][0].Name,
+                     borderColor: colorList[26],
                      lineTension: 0, //<===追加
                      fill: false,    //<===追加
                      data: [
