@@ -7,14 +7,14 @@
   {% block content %}
       <div class="container">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-        <canvas id="ChartDemo" width="600" height="200"></canvas>
+        <canvas id="ChartDemo" width="600" height="400"></canvas>
           <script>
             var persons={{result|tojson}};
             var ctx = document.getElementById("ChartDemo").getContext('2d');
-            const colorList=["aqua","blue","fuchsia","gray","green","lime","maroon","navy",
+            const colorList=["aqua","blue","fuchsia","gray","black","lime","maroon","navy",
                               "purple","red","teal","yellow","DarkCyan","DarkSalmon",
                               "DarkTurquoise","DeepPink","ForestGreen","Gold","GreenYellow",
-                              "LightBlue","LightGreen","LightSeaGreen","LimeGreen",
+                              "LightBlue","LightGreen","LightSeaGreen","MidnightBlue",
                               "MediumAquaMarine","MediumBlue","MediumSpringGreen"];
             var ChartDemo = new Chart(ctx, {
                type: 'line',
