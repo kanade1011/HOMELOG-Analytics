@@ -14,7 +14,8 @@ def view_index():
     title = 'homelog analytics'
     official_list = officials.namelist
     month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    return render_template('index.html', title=title, list=official_list, year=month_list)
+    return render_template(
+        'index.html', title=title, list=official_list, year=month_list)
 
 
 @view.route('/result/<specified_month>')
@@ -31,6 +32,14 @@ def view_this_month_summary():
     result = result_getter.result_getter(month=month)
     print(result)
     return render_template('month_summary.html', result=result, month=month)
+
+
+@view.route('/result/all')
+def view_all_summary():
+    month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    result = result_getter.all_person_record_getter()
+    print("result is :%s" % result)
+    return render_template('all_summary.html', result=result, year=month_list)
 
 
 @view.route('/result/person/<person>')

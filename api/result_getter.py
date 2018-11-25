@@ -57,21 +57,28 @@ def all_person_record_getter():
     month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     personal_sending_list = []
     for person in officials.namelist:
-        report = {'Name': person}
+        report = [{'Name': person}]
         for month in month_list:
             try:
                 rec = collection.find_one({"month": str(month)})
                 month_data = rec['body']
                 for persons in month_data:
                     if persons['name'] == person:
-                        report[month] = persons['count']
-                        # print(month, persons['count'])
+                        dictionary = {}
+                        dictionary['month'] = month
+                        dictionary['badge'] = persons['count']
+                        # print(dictionary)
+                        report.append(dictionary)
             except:
-                report[month] = 0
+                dictionary = {}
+                dictionary['month'] = month
+                dictionary['badge'] = 0
+                # print(dictionary)
+                report.append(dictionary)
         personal_sending_list.append(report)
     # print(personal_sending_list)
     return personal_sending_list
 
 
 if __name__ == '__main__':
-    person_record_getter()
+    all_person_record_getter()
