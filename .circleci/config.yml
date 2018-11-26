@@ -1,13 +1,9 @@
-general:
-  branches:
-    only:
-      - master
-      - develop
- deployment:
-  staging:
-    branch: develop
-  production:
-    branch: master
- test:
-    override:
-      - echo "----- No executable test ----
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9.2
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+      - run: echo "----- No executable test ----"
