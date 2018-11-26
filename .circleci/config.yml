@@ -4,16 +4,13 @@ general:
       - master
       - develop
 
-deployment:
-  staging:
-    branch: develop
-      commands:
-        - /bin/bash ./scripts/deployment-staging.sh
-  production:
-    branch: master
-    commands:
-      - /bin/bash ./scripts/deployment-production.sh
+dependencies:
+  pre:
+    - chmod -R 777 ./example
+    - pip install -r ./requirements.txt
 
 test:
-    override:
-      - echo "----- No executable test -----"
+  override:
+    - pwd ~
+    - ifconfig
+    - exit 0
