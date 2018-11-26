@@ -3,14 +3,11 @@ general:
     only:
       - master
       - develop
-
-dependencies:
-  pre:
-    - chmod -R 777 ./example
-    - pip install -r ./requirements.txt
-
-test:
-  override:
-    - pwd ~
-    - ifconfig
-    - exit 0
+ deployment:
+  staging:
+    branch: develop
+  production:
+    branch: master
+ test:
+    override:
+      - echo "----- No executable test ----
