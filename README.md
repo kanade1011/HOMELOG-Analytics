@@ -1,4 +1,5 @@
 # HOMELOG Analytics
+[![CircleCI](https://circleci.com/gh/SHINJIR0/HOMELOG-Analytics/tree/master.svg?style=svg)](https://circleci.com/gh/SHINJIR0/HOMELOG-Analytics/tree/master)
 ## Usage
 
 - run mongoDB by CLI.
