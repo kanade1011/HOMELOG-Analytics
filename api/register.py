@@ -2,6 +2,7 @@ from flask import Blueprint
 from bs4 import BeautifulSoup
 import calendar
 from collections import Counter
+import csv
 import datetime
 import numpy
 import os
@@ -32,14 +33,12 @@ def insert_collection():
     result_dict = count_officials_sending(sending_dict)
     result_for_sending = {'month': '%d' % (today.month-1), 'body': result_dict}
     create_collection().insert_one(result_for_sending)
-    # create_collection().remove({'month': "10"})
     record = create_collection().find_one({"month": str(10)})
     print(record)
-    # print(result_for_sending)
     return redirect('/')
 
 
-@register.route('/updata/<month>')
+@register.route('/update/<month>')
 def updata_collection(month=None):
     session = login_to_homelog()
     source_file = get_csv(session, month=int(month))
@@ -52,6 +51,35 @@ def updata_collection(month=None):
     # print(result_for_sending)
     # return ("updata completed: %s"%record)
     return redirect('/')
+
+
+@register.route('/badge_kind/update/<month>')
+def insert_sender_receiver_badgekind(month=None):
+    month = month or today.month-1
+    session = login_to_homelog()
+    source_file = get_csv(session, month=int(month))
+    sending_list = create_all_data_dict(source_file)
+    # print(sending_list)
+    result_dict = extract_sender_receiver_badgekind(sending_list)
+    result_for_sending = {'month': 'bk_%d' % int(month), 'body': result_dict}
+    create_collection().remove({'month': 'bk_%d' % int(month)})
+    create_collection().insert_one(result_for_sending)
+    record = create_collection().find_one({"month": 'bk_%d' % int(month)})
+    print('record :%s' % record)
+    return redirect('/')
+
+
+def extract_sender_receiver_badgekind(sending_list):
+    sender_receiver_badgekind_list = []
+    for row in sending_list:
+        temp_dict = {}
+        temp_dict['送信者名'] = row['送信者名']
+        temp_dict['受信者名'] = row['受信者名']
+        temp_dict['贈ったバッジ'] = row['贈ったバッジ']
+        temp_dict['メッセージ'] = row['メッセージ']
+        sender_receiver_badgekind_list.append(temp_dict)
+    # print(sender_receiver_badgekind_list)
+    return sender_receiver_badgekind_list
 
 
 def login_to_homelog():
@@ -115,6 +143,16 @@ def extract_sender(source_file):
         return num_list
 
 
+def create_all_data_dict(source_file):
+    with open(source_file, 'r', encoding='CP932') as fin:
+        reader = csv.DictReader(fin)
+        print(reader)
+        data=[]
+        for row in reader:
+            data.append(row)
+        return data
+
+
 def count_officials_sending(sending_dict):
     official_list = officials.namelist
     officials_send_count_dict = []
@@ -133,5 +171,5 @@ def count_officials_sending(sending_dict):
 
 if __name__ == '__main__':
     print('start')
-    insert_collection()
+    insert_sender_receiver_badgekind()
     print('end')

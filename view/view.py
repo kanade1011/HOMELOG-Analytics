@@ -48,7 +48,16 @@ def view_personal_sending(person=None):
     result = result_getter.person_record_getter(person=person)
     print(result)
     return render_template(
-        'personal_summary.html', result=result, person=person)
+        'personal_summary.html', result=result, person=person)\
+
+
+@view.route('/result/badge_kind/<month>')
+def view_sender_receiver_badgekind(month=None):
+    month = month or today.month-1
+    result = result_getter.badgekind_getter(month=month)
+    print(result)
+    return render_template(
+        'badgekind_summary.html', result=result, month=month)
 
 
 if __name__ == '__main__':

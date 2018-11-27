@@ -27,6 +27,11 @@ def result_getter(month=None):
     return record['body']
 
 
+def badgekind_getter(month):
+    record = collection.find_one({"month": 'bk_%s' % month})
+    return record['body']
+
+
 @api.route('/<person>')
 def person_record_getter(person=None):
     person = person or "小澤 健治"
