@@ -42,13 +42,20 @@
     </select>
   </form></div>
 
-  <div><form NAME="form5">
-    <select NAME="select5" onChange="if(document.form5.select5.value){location.href=document.form5.select5.value;}">
+  <div><form action="/result/badge_kind/" NAME="form5">
+    <select name="month">
       <option> ▼ 送信したバッジの種類を表示する月を選択してください　</option>
       {% for month in year %}
-        <option value="/result/badge_kind/{{month}}">{{month}}</option>
+        <option value="{{month}}">{{month}}</option>
       {% endfor %}
     </select>
+    <select name="badge">
+      <option> ▼ 送信したバッジの種類を表示する月を選択してください　</option>
+      {% for badge in badge_list %}
+        <option value="{{badge}}">{{badge}}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">SEARCH</button>
   </form></div>
 
   <div><a href="/register">前月の結果を取得する</a></div>

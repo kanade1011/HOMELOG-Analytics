@@ -60,6 +60,7 @@ def insert_sender_receiver_badgekind(month=None):
     source_file = get_csv(session, month=int(month))
     sending_list = create_all_data_dict(source_file)
     # print(sending_list)
+    #TODO:Change logic insert all data record and extract per scean
     result_dict = extract_sender_receiver_badgekind(sending_list)
     result_for_sending = {'month': 'bk_%d' % int(month), 'body': result_dict}
     create_collection().remove({'month': 'bk_%d' % int(month)})

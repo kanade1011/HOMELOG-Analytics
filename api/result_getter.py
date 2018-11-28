@@ -27,9 +27,16 @@ def result_getter(month=None):
     return record['body']
 
 
-def badgekind_getter(month):
+def badgekind_getter(month, badge_name):
     record = collection.find_one({"month": 'bk_%s' % month})
-    return record['body']
+    print(record)
+    reslut_list = []
+    print(month)
+    print(badge_name)
+    for row in record['body']:
+        if row['贈ったバッジ']==badge_name:
+            reslut_list.append(row)
+    return reslut_list
 
 
 @api.route('/<person>')
