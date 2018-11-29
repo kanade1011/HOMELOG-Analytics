@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from bs4 import BeautifulSoup
 import calendar
 import csv
@@ -6,6 +6,7 @@ import datetime
 import os
 import requests
 import tempfile
+import threading
 from flask import redirect
 import dotenv
 from pymongo import MongoClient
@@ -34,6 +35,13 @@ def insert_monthly_record(month=None):
     return redirect('/')
 
 
+def insert_all_month():
+    year = [1, 2]
+    for month in year:
+        insert_monthly_record(month)
+    return redirect('/')
+
+
 def create_all_data_list(csv_record):
     tmp = tempfile.NamedTemporaryFile().name
     with open(tmp, 'w') as f:
@@ -41,7 +49,7 @@ def create_all_data_list(csv_record):
 
     with open(tmp, 'r', encoding='CP932') as fin:
         reader = csv.DictReader(fin)
-        print(reader)
+        # print(reader)
         data = []
         for row in reader:
             data.append(row)
