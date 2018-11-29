@@ -2,6 +2,7 @@ from flask import Blueprint
 from pymongo import MongoClient
 import os
 import officials
+from api import processor
 
 api = Blueprint("result_getter", __name__, url_prefix="/api")
 
@@ -18,37 +19,28 @@ def create_collection():
     return collection
 
 
-collection = create_collection()
-
-
-@api.route('/<month>')
-def result_getter(month=None):
-    record = collection.find_one({"month": str(month)})
-    return record['body']
-
-
 def badgekind_getter(month, badge_name):
-    record = collection.find_one({"month": 'bk_%s' % month})
-    print(record)
+    record = processor.result_getter(month)
     reslut_list = []
-    print(month)
-    print(badge_name)
-    for row in record['body']:
+    for row in record:
         if row['贈ったバッジ']==badge_name:
             reslut_list.append(row)
     return reslut_list
 
 
-@api.route('/<person>')
+def monthly_data_getter(month):
+    return processor.count_officials_sending(month)
+
+
 def person_record_getter(person=None):
     person = person or "小澤 健治"
     month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     report = []
     for month in month_list:
         try:
-            rec = collection.find_one({"month": str(month)})
-            month_data = rec['body']
-            for persons in month_data:
+            monthly_date = processor.count_officials_sending(month)
+            print("%d monthly_data: %s" % (month, monthly_date))
+            for persons in monthly_date:
                 if persons['name'] == person:
                     dictionary = {}
                     dictionary['month'] = month
@@ -56,6 +48,7 @@ def person_record_getter(person=None):
                     # print(dictionary)
                     report.append(dictionary)
         except:
+            print("pass data: %d", month)
             dictionary = {}
             dictionary['month'] = month
             dictionary['badge'] = 0
@@ -72,8 +65,7 @@ def all_person_record_getter():
         report = [{'Name': person}]
         for month in month_list:
             try:
-                rec = collection.find_one({"month": str(month)})
-                month_data = rec['body']
+                month_data = processor.count_officials_sending(month)
                 for persons in month_data:
                     if persons['name'] == person:
                         dictionary = {}
