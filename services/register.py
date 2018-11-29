@@ -21,55 +21,8 @@ def create_collection():
     collection = db['analytic_database']
     return collection
 
-#
-# @register.route('/')
-# def insert_collection():
-#     session = login_to_homelog()
-#     source_file = get_csv(session)
-#
-#     sender_dict = extract_sender(source_file)
-#     print(sender_dict)
-#     result_dict = count_officials_sending(sender_dict)
-#     result_for_sending = {'month': '%d' % (today.month-1), 'body': result_dict}
-#     create_collection().insert_one(result_for_sending)
-#     record = create_collection().find_one({"month": str(10)})
-#     print(record)
-#     return redirect('/')
-#
-#
-# @register.route('/update/<month>')
-# def updata_collection(month=None):
-#     session = login_to_homelog()
-#     source_file = get_csv(session, month=int(month))
-#     sender_dict = extract_sender(source_file)
-#     result_dict = count_officials_sending(sender_dict)
-#     create_collection().remove({'month': str(month)})
-#     create_collection().insert_one({'month': str(month), 'body': result_dict})
-#     record = create_collection().find_one({"month": str(month)})
-#     print(record)
-#     # print(result_for_sending)
-#     # return ("updata completed: %s"%record)
-#     return redirect('/')
-#
-#
-# @register.route('/badge_kind/update/<month>')
-# def insert_sender_receiver_badgekind(month=None):
-#     month = month or today.month-1
-#     session = login_to_homelog()
-#     source_file = get_csv(session, month=int(month))
-#     sending_list = create_all_data_dict(source_file)
-#     # print(sending_list)
-#     #TODO:Change logic insert all data record and extract per scean
-#     result_dict = extract_sender_receiver_badgekind(sending_list)
-#     result_for_sending = {'month': 'bk_%d' % int(month), 'body': result_dict}
-#     create_collection().remove({'month': 'bk_%d' % int(month)})
-#     create_collection().insert_one(result_for_sending)
-#     record = create_collection().find_one({"month": 'bk_%d' % int(month)})
-#     print('record :%s' % record)
-#     return redirect('/')
 
-
-@register.route('/<month>')#REFACTORED
+@register.route('/<month>')
 def insert_monthly_record(month=None):
     session = login_to_homelog()
     csv_record = get_csv(session, month=int(month))
@@ -83,7 +36,7 @@ def insert_monthly_record(month=None):
 
 def create_all_data_list(csv_record):
     tmp = tempfile.NamedTemporaryFile().name
-    with open(tmp, 'w')as f:
+    with open(tmp, 'w') as f:
         f.write(csv_record)
 
     with open(tmp, 'r', encoding='CP932') as fin:
@@ -118,7 +71,7 @@ def login_to_homelog():
 
 
 def get_csv(session, month=None):
-    month = month or today.month-1
+    month = month or today.month - 1
     datasheet = os.environ.get('DATA_URL')
     base_calender = "%s/%d" % (today.year, month)
     date_from = '%s/01' % base_calender

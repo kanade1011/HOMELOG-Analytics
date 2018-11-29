@@ -1,29 +1,12 @@
-from flask import Blueprint
-from pymongo import MongoClient
-import os
 import officials
-from api import processor
-
-api = Blueprint("result_getter", __name__, url_prefix="/api")
-
-
-def create_collection():
-    MONGO_URL = os.environ.get('MONGOHQ_URL')
-    if MONGO_URL:
-        client = MongoClient(MONGO_URL)
-        db = client['analytic_database']
-    else:
-        client = MongoClient('localhost', 27017)
-        db = client['analytic_database']
-    collection = db['analytic_database']
-    return collection
+from services import processor
 
 
 def badgekind_getter(month, badge_name):
     record = processor.result_getter(month)
     reslut_list = []
     for row in record:
-        if row['贈ったバッジ']==badge_name:
+        if row['贈ったバッジ'] == badge_name:
             reslut_list.append(row)
     return reslut_list
 

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
-      <title>{{ month }}の送信</title>
+      <title>{{ month }}月の送信</title>
   </head>
   <body>
   {% block content %}
       <div class="container">
-        <span>{{ month }}の送信</span>
+        <h1>{{ month }}月の{{badge}}の送信数: {{count}}個</h1>
         <table>
           <tr>
             <th>送信者名</th><th>受信者名</th><th>贈ったバッジ</th><th>メッセージ</th>
