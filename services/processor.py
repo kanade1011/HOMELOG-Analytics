@@ -25,7 +25,7 @@ def result_getter(month):
 def create_sender_dict(month):
     data = result_getter(month)
     sender = []
-    print(data)
+    # print(data)
     for rec in data:
         sender.append(rec['送信者名'])
     processed_list = numpy.ravel(sender)
@@ -33,7 +33,7 @@ def create_sender_dict(month):
     sender_dict = {}
     for word, cnt in counter.most_common():
         sender_dict[word] = cnt
-    print(sender_dict)
+    # print(sender_dict)
     return sender_dict
 
 

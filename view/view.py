@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 import os
 import datetime
+import pandas
 import officials
 from services import result_creater
 import badgelist
@@ -62,8 +63,26 @@ def view_sender_receiver_badgekind():
         count=len(result))
 
 
+@view.route('/download/<month>')
+def download_monthly_data(month):
+    month = month or '%s' % (today.month - 1)
+    result = result_creater.monthly_data_getter(month)
+    index=[]
+    counter = []
+    for buffer in result:
+        index.append(buffer['name'])
+        counter.append(buffer['count'])
+    # print(index)
+    df = pandas.DataFrame(counter, index=index)
+    base_dir, _ = os.path.split(os.getcwd())
+    data_dir = os.path.join(base_dir, 'Data', 'October.xlsx')
+    # print(data_dir)
+    df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
+
+
 if __name__ == '__main__':
     # view_month_summary()
     # view_personal_sending()
     # view_all_summary()
-    view_personal_sending()
+    # view_personal_sending()
+    download_monthly_data(10)
