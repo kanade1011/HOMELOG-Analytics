@@ -33,6 +33,15 @@
     </select>
   </form></div>
 
+  <div><form NAME="form4">
+    <select NAME="select4" onChange="if(document.form4.select4.value){location.href=document.form4.select4.value;}">
+      <option> ▼ データをダウンロードする月を選択してください　</option>
+      {% for month in year %}
+          <option value="/download/{{month}}">{{month}}月</option>
+      {% endfor %}
+    </select>
+  </form></div>
+
   <div><form action="/result/badge_kind/" NAME="form5">
     <select name="month">
       <option> ▼ 送信したバッジの種類を表示する月を選択してください　</option>
@@ -50,7 +59,7 @@
   </form></div>
 
   <div><a href="/result/all">全データを表示する</a></div>
-  <div class="loading"><a href="/register">全データを更新する</a></div>
+  <div class="loading"><a href="/register/all">全データを更新する</a></div>
 
   <a href="/">home</a>
   {% endblock %}

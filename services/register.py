@@ -35,8 +35,9 @@ def insert_monthly_record(month=None):
     return redirect('/')
 
 
+@register.route('/all')
 def insert_all_month():
-    year = [1, 2]
+    year = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     for month in year:
         insert_monthly_record(month)
     return redirect('/')

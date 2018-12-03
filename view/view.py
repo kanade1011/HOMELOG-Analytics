@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect
 import os
 import datetime
 import pandas
 import officials
-from services import result_creater
+from services import result_creater, processor
 import badgelist
 
 view = Blueprint("view", __name__, url_prefix="/")
@@ -74,10 +74,12 @@ def download_monthly_data(month):
         counter.append(buffer['count'])
     # print(index)
     df = pandas.DataFrame(counter, index=index)
-    base_dir, _ = os.path.split(os.getcwd())
-    data_dir = os.path.join(base_dir, 'Data', 'October.xlsx')
+    base_dir = os.getcwd()
+    filename = processor.create_filename(month)
+    data_dir = os.path.join(base_dir, 'Data', filename)
     # print(data_dir)
     df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
+    return redirect('/')
 
 
 if __name__ == '__main__':
