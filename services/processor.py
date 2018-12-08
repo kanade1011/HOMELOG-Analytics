@@ -43,8 +43,8 @@ def create_sender_dict(year, month):
     return sender_dict
 
 
-def extract_sender_receiver_badgekind(month):
-    sending_list = result_getter(month)
+def extract_sender_receiver_badgekind(year, month):
+    sending_list = result_getter(year, month)
     sender_receiver_badgekind_list = []
     for row in sending_list:
         temp_dict = {}
@@ -56,8 +56,8 @@ def extract_sender_receiver_badgekind(month):
     return sender_receiver_badgekind_list
 
 
-def count_officials_sending(month):
-    sender_dict = create_sender_dict(month)
+def count_officials_sending(year, month):
+    sender_dict = create_sender_dict(year, month)
     official_list = officials.namelist
     officials_send_count_dict = []
     for person in official_list:

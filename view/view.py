@@ -40,7 +40,7 @@ def view_index():
 def view_month_summary(year=None, specified_month=None):
     month = specified_month or '%s' % (today.month - 1)
     year = year or 2018
-    result = result_creater.monthly_data_getter(month)
+    result = result_creater.monthly_data_getter(year, month)
     print(result)
     return render_template('month_summary.html', result=result, year=year, month=month)
 
@@ -79,10 +79,13 @@ def view_sender_receiver_badgekind():
         count=len(result))
 
 
-@view.route('/download/<month>')
-def download_monthly_data(month):
-    month = month or '%s' % (today.month - 1)
-    result = result_creater.monthly_data_getter(month)
+@view.route('/download/<data>')
+def download_monthly_data(data):
+    year = data[:4]
+    print(year)
+    month = data[5::]
+    print(month)
+    result = result_creater.monthly_data_getter(year, month)
     print("downloaded: %s" % result)
     index = []
     counter = []

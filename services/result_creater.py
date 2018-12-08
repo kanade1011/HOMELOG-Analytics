@@ -11,17 +11,17 @@ def badgekind_getter(year, month, badge_name):
     return reslut_list
 
 
-def monthly_data_getter(month):
-    return processor.count_officials_sending(month)
+def monthly_data_getter(year, month):
+    return processor.count_officials_sending(year, month)
 
 
-def person_record_getter(person=None):
+def person_record_getter(year, person=None):
     person = person or "小澤 健治"
     month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     report = []
     for month in month_list:
         try:
-            monthly_date = processor.count_officials_sending(month)
+            monthly_date = processor.count_officials_sending(year, month)
             print("%d monthly_data: %s" % (month, monthly_date))
             for persons in monthly_date:
                 if persons['name'] == person:

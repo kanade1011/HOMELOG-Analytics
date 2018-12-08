@@ -64,7 +64,7 @@ def create_all_data_list(csv_record):
     with open(tmp, 'w') as f:
         f.write(csv_record)
 
-    with open(tmp, 'r', encoding='CP932') as fin:
+    with open(tmp, 'r') as fin:
         reader = csv.DictReader(fin)
         # print(reader)
         data = []
