@@ -12,25 +12,37 @@ users = os.environ.get("ADMIN")
 month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 
+def create_data_list():
+    data_list = []
+    year_list = [2017, 2018, 2019]
+    for year in year_list:
+        for month in month_list:
+            data_list.append("%d/%d" % (year, month))
+    return data_list
+
+
 @view.route('/')
 def view_index():
     title = 'homelog analytics'
     official_list = officials.namelist
     badge_list = badgelist.badge_list
+    updated = processor.get_update_data()
     return render_template(
         'index.html',
         title=title,
         list=official_list,
-        year=month_list,
-        badge_list=badge_list)
+        year=create_data_list(),
+        badge_list=badge_list,
+        last_updated=updated['body'])
 
 
-@view.route('/result/<specified_month>')
-def view_month_summary(specified_month=None):
+@view.route('/result/<year>/<specified_month>')
+def view_month_summary(year=None, specified_month=None):
     month = specified_month or '%s' % (today.month - 1)
+    year = year or 2018
     result = result_creater.monthly_data_getter(month)
     print(result)
-    return render_template('month_summary.html', result=result, month=month)
+    return render_template('month_summary.html', result=result, year=year, month=month)
 
 
 @view.route('/result/all')
@@ -51,9 +63,13 @@ def view_personal_sending(person=None):
 
 @view.route('/result/badge_kind/')
 def view_sender_receiver_badgekind():
-    month = request.args.get('month')
+    data = request.args.get('month')
+    year = data[:4]
+    print(year)
+    month = data[5::]
+    print(month)
     badge = request.args.get('badge')
-    result = result_creater.badgekind_getter(month, badge)
+    result = result_creater.badgekind_getter(year, month, badge)
     print(result)
     return render_template(
         'badgekind_summary.html',
@@ -67,7 +83,8 @@ def view_sender_receiver_badgekind():
 def download_monthly_data(month):
     month = month or '%s' % (today.month - 1)
     result = result_creater.monthly_data_getter(month)
-    index=[]
+    print("downloaded: %s" % result)
+    index = []
     counter = []
     for buffer in result:
         index.append(buffer['name'])

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
 from bs4 import BeautifulSoup
 import calendar
 import csv
@@ -23,24 +23,40 @@ def create_collection():
     return collection
 
 
-@register.route('/<month>')
-def insert_monthly_record(month=None):
+def update_data():
+    now = datetime.datetime.now()
+    last_update = "%d/%d/%d" % (now.year, now.month, now.day)
+    create_collection().insert_one({'last_update': True, 'body': last_update})
+
+
+@register.route('<year>/<month>')
+def insert_monthly_record(year=None, month=None):
+    year = year or 2018
     session = login_to_homelog()
-    csv_record = get_csv(session, month=int(month))
+    csv_record = get_csv(session,year=int(year), month=int(month))
     sending_list = create_all_data_list(csv_record)
-    result_for_sending = {'month': '%d' % int(month), 'body': sending_list}
+    result_for_sending = {'y-month': '%s/%s' % (year, month), 'body': sending_list}
     print(result_for_sending)
-    create_collection().remove({'month': str(month)})
+    create_collection().remove({'y-month': '%s/%s' % (year, month)})
     create_collection().insert_one(result_for_sending)
     return redirect('/')
 
 
 @register.route('/all')
 def insert_all_month():
-    year = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    for month in year:
-        insert_monthly_record(month)
+    thread_1 = threading.Thread(target=insert_all_month_threading)
+    #thread_1.start()
+    update_data()
+    print("updated")
     return redirect('/')
+
+
+def insert_all_month_threading():
+    year_list = [2017, 2018]
+    month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    for year in year_list:
+        for month in month_list:
+            insert_monthly_record(year, month)
 
 
 def create_all_data_list(csv_record):
@@ -79,13 +95,14 @@ def login_to_homelog():
     return session
 
 
-def get_csv(session, month=None):
+def get_csv(session,year=None, month=None):
     month = month or today.month - 1
+    year = year or 2018
     datasheet = os.environ.get('DATA_URL')
-    base_calender = "%s/%d" % (today.year, month)
+    base_calender = "%s/%d" % (year, month)
     date_from = '%s/01' % base_calender
     print(date_from)
-    _, end_month = calendar.monthrange(today.year, month)
+    _, end_month = calendar.monthrange(year, month)
     date_to = '%s/%d' % (base_calender, end_month)
     print(date_to)
 

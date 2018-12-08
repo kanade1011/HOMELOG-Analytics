@@ -2,8 +2,8 @@ import officials
 from services import processor
 
 
-def badgekind_getter(month, badge_name):
-    record = processor.result_getter(month)
+def badgekind_getter(year, month, badge_name):
+    record = processor.result_getter(year, month)
     reslut_list = []
     for row in record:
         if row['贈ったバッジ'] == badge_name:

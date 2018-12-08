@@ -17,13 +17,19 @@ def create_collection():
     return collection
 
 
-def result_getter(month):
-    record = create_collection().find_one({"month": str(month)})
+def result_getter(year, month):
+    record = create_collection().find_one({'y-month': '%s/%s' % (year, month)})
     return record['body']
 
 
-def create_sender_dict(month):
-    data = result_getter(month)
+def get_update_data():
+    last_updated = create_collection().find_one({'last_update': True})
+    print(last_updated)
+    return last_updated
+
+
+def create_sender_dict(year, month):
+    data = result_getter(year, month)
     sender = []
     # print(data)
     for rec in data:

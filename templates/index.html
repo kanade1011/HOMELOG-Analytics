@@ -50,7 +50,7 @@
       {% endfor %}
     </select>
     <select name="badge">
-      <option> ▼ 送信したバッジの種類を表示する月を選択してください　</option>
+      <option> ▼ 送信したバッジの種類を選択してください　</option>
       {% for badge in badge_list %}
         <option value="{{badge}}">{{badge}}</option>
       {% endfor %}
@@ -59,7 +59,7 @@
   </form></div>
 
   <div><a href="/result/all">全データを表示する</a></div>
-  <div class="loading"><a href="/register/all">全データを更新する</a></div>
+  <div class="loading"><a href="/register/all">全データを更新する</a><a>最終更新日時：{{last_updated}}</a></div>
 
   <a href="/">home</a>
   {% endblock %}
