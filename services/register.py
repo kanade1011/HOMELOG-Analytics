@@ -45,7 +45,7 @@ def insert_monthly_record(year=None, month=None):
 @register.route('/all')
 def insert_all_month():
     thread_1 = threading.Thread(target=insert_all_month_threading)
-    #thread_1.start()
+    thread_1.start()
     update_data()
     print("updated")
     return redirect('/')
