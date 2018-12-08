@@ -15,8 +15,9 @@ def monthly_data_getter(year, month):
     return processor.count_officials_sending(year, month)
 
 
-def person_record_getter(year, person=None):
+def person_record_getter(person=None):
     person = person or "小澤 健治"
+    year = 2018
     month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     report = []
     for month in month_list:
