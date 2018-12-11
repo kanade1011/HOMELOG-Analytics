@@ -25,8 +25,11 @@ def create_collection():
 
 def update_data():
     now = datetime.datetime.now()
-    last_update = '%d/%d/%d' % (now.year, now.month, now.day)
+    last_update = '%d/%d/%d %d:%d.%d' % (now.year, now.month, now.day, now.hour, now.minute, now.second)
+    create_collection().remove({'last_update': True})
     create_collection().insert_one({'last_update': True, 'body': last_update})
+    last_update_record = create_collection().find_one({'last_update': True})
+    print('updated at %s' % last_update_record)
 
 
 @register.route('<year>/<month>')
@@ -47,7 +50,6 @@ def insert_all_month():
     thread_1 = threading.Thread(target=insert_all_month_threading)
     thread_1.start()
     update_data()
-    print('updated')
     return redirect('/')
 
 

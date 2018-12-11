@@ -28,16 +28,16 @@ def view_index():
     badge_list = badgelist.badge_list
     updated = processor.get_update_data()
     try:
-        u_data = updated['body']
+        u_date = updated['body']
     except:
-        u_data = None
+        u_date = None
     return render_template(
         'index.html',
         title=title,
         list=official_list,
         year=create_data_list(),
         badge_list=badge_list,
-        last_updated=u_data)
+        last_updated=u_date)
 
 
 @view.route('/analytics/18_mvp')

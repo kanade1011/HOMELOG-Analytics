@@ -57,22 +57,6 @@
     </select>
     <button type='submit'>SEARCH</button>
   </form></div>
-  
-  <div><form action='/analytics/18_mvp' NAME='form6'>
-    <select name='month'>
-      <option> ▼ 集計開始月を表示する月を選択してください　</option>
-      {% for month in year %}
-        <option value='{{month}}'>{{month}}</option>
-      {% endfor %}
-    </select>
-    <select name='fin-month'>
-      <option> ▼ 集計終了月を選択してください　</option>
-      {% for month in year %}
-        <option value='{{month}}'>{{month}}</option>
-      {% endfor %}
-    </select>
-    <button type='submit'>SEARCH</button>
-  </form></div>
 
   <div><a href='/result/all'>全データを表示する</a></div>
   <div class='loading'><a href='/register/all'>全データを更新する</a><a>最終更新日時：{{last_updated}}</a></div>
