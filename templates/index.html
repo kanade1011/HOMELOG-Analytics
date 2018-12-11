@@ -1,67 +1,83 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang='ja'>
   <head>
       <title>{{ title }}</title>
   </head>
   <body>
   {% block content %}
   <div>
-    <form NAME="form1">
-      <select NAME="select1" onChange="if(document.form1.select1.value){location.href=document.form1.select1.value;}">
+    <form NAME='form1'>
+      <select NAME='select1' onChange='if(document.form1.select1.value){location.href=document.form1.select1.value;}'>
         <option> ▼ データを表示する月を選択してください　</option>
         {% for month in year %}
-          <option value="/result/{{month}}">{{month}}月</option>
+          <option value='/result/{{month}}'>{{month}}月</option>
         {% endfor %}
       </select>
     </form>
   </div>
-  <div><form NAME="form2">
-    <select NAME="select2" onChange="if(document.form2.select2.value){location.href=document.form2.select2.value;}">
+  <div><form NAME='form2'>
+    <select NAME='select2' onChange='if(document.form2.select2.value){location.href=document.form2.select2.value;}'>
       <option> ▼ データを表示する人物を選択してください　</option>
       {% for person in list %}
-        <option value="/result/person/{{person}}">{{person}}</option>
+        <option value='/result/person/{{person}}'>{{person}}</option>
       {% endfor %}
     </select>
   </form></div>
 
-  <div><form NAME="form3">
-    <select NAME="select3" onChange="if(document.form3.select3.value){location.href=document.form3.select3.value;}">
+  <div><form NAME='form3'>
+    <select NAME='select3' onChange='if(document.form3.select3.value){location.href=document.form3.select3.value;}'>
       <option> ▼ データを更新する月を選択してください　</option>
       {% for month in year %}
-          <option value="/register/{{month}}">{{month}}月</option>
+          <option value='/register/{{month}}'>{{month}}月</option>
       {% endfor %}
     </select>
   </form></div>
 
-  <div><form NAME="form4">
-    <select NAME="select4" onChange="if(document.form4.select4.value){location.href=document.form4.select4.value;}">
+  <div><form NAME='form4'>
+    <select NAME='select4' onChange='if(document.form4.select4.value){location.href=document.form4.select4.value;}'>
       <option> ▼ データをダウンロードする月を選択してください　</option>
       {% for month in year %}
-          <option value="/download/{{month}}">{{month}}月</option>
+          <option value='/download/{{month}}'>{{month}}月</option>
       {% endfor %}
     </select>
   </form></div>
 
-  <div><form action="/result/badge_kind/" NAME="form5">
-    <select name="month">
+  <div><form action='/result/badge_kind/' NAME='form5'>
+    <select name='month'>
       <option> ▼ 送信したバッジの種類を表示する月を選択してください　</option>
       {% for month in year %}
-        <option value="{{month}}">{{month}}</option>
+        <option value='{{month}}'>{{month}}</option>
       {% endfor %}
     </select>
-    <select name="badge">
+    <select name='badge'>
       <option> ▼ 送信したバッジの種類を選択してください　</option>
       {% for badge in badge_list %}
-        <option value="{{badge}}">{{badge}}</option>
+        <option value='{{badge}}'>{{badge}}</option>
       {% endfor %}
     </select>
-    <button type="submit">SEARCH</button>
+    <button type='submit'>SEARCH</button>
+  </form></div>
+  
+  <div><form action='/analytics/18_mvp' NAME='form6'>
+    <select name='month'>
+      <option> ▼ 集計開始月を表示する月を選択してください　</option>
+      {% for month in year %}
+        <option value='{{month}}'>{{month}}</option>
+      {% endfor %}
+    </select>
+    <select name='fin-month'>
+      <option> ▼ 集計終了月を選択してください　</option>
+      {% for month in year %}
+        <option value='{{month}}'>{{month}}</option>
+      {% endfor %}
+    </select>
+    <button type='submit'>SEARCH</button>
   </form></div>
 
-  <div><a href="/result/all">全データを表示する</a></div>
-  <div class="loading"><a href="/register/all">全データを更新する</a><a>最終更新日時：{{last_updated}}</a></div>
+  <div><a href='/result/all'>全データを表示する</a></div>
+  <div class='loading'><a href='/register/all'>全データを更新する</a><a>最終更新日時：{{last_updated}}</a></div>
 
-  <a href="/">home</a>
+  <a href='/'>home</a>
   {% endblock %}
   </body>
 </html>

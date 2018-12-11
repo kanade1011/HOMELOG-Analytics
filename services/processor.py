@@ -28,6 +28,34 @@ def get_update_data():
     return last_updated
 
 
+def _get_specific_monthly(year):
+    results = []
+    months = [7, 8, 9, 10, 11]
+    for month in months:
+        print(month)
+        result = result_getter(year, month)
+        for badge in result:
+            results.append(badge['送信者名'])
+            results.append(badge['受信者名'])
+        print('%d result: %s' % (month,results))
+        print('%d end' % month)
+    print('get_specific_monthly return: %s' % results)
+    return results
+
+
+def count_sending_and_receive(year):
+    results = _get_specific_monthly(year)
+    counter = Counter(results)
+    sender_and_receiver_list = []
+    for word, cnt in counter.most_common():
+        sender_and_receiver_dict = {}
+        sender_and_receiver_dict['name'] = word
+        sender_and_receiver_dict['count'] = cnt
+        sender_and_receiver_list.append(sender_and_receiver_dict)
+    print('count_sending_and_receive return: %s' % sender_and_receiver_list)
+    return sender_and_receiver_list
+
+
 def create_sender_dict(year, month):
     data = result_getter(year, month)
     sender = []
@@ -59,52 +87,52 @@ def extract_sender_receiver_badgekind(year, month):
 def count_officials_sending(year, month):
     sender_dict = create_sender_dict(year, month)
     official_list = officials.namelist
-    officials_send_count_dict = []
+    officials_send_count_list = []
     for person in official_list:
         tmp = {}
         try:
-            tmp["name"] = person
-            tmp["count"] = sender_dict[person]
-            officials_send_count_dict.append(tmp)
+            tmp['name'] = person
+            tmp['count'] = sender_dict[person]
+            officials_send_count_list.append(tmp)
         except:
-            tmp["name"] = person
-            tmp["count"] = 0
-            officials_send_count_dict.append(tmp)
-    return officials_send_count_dict
+            tmp['name'] = person
+            tmp['count'] = 0
+            officials_send_count_list.append(tmp)
+    return officials_send_count_list
 
 
 def create_filename(month):
     month = int(month)
-    month_name = ""
+    month_name = ''
     if month == 1:
-        month_name = "January"
+        month_name = 'January'
     elif month == 2:
-        month_name = "February"
+        month_name = 'February'
     elif month == 3:
-        month_name = "March"
+        month_name = 'March'
     elif month == 4:
-        month_name = "April"
+        month_name = 'April'
     elif month == 5:
-        month_name = "May"
+        month_name = 'May'
     elif month == 6:
-        month_name = "June"
+        month_name = 'June'
     elif month == 7:
-        month_name = "July"
+        month_name = 'July'
     elif month == 8:
-        month_name = "August"
+        month_name = 'August'
     elif month == 9:
-        month_name = "September"
+        month_name = 'September'
     elif month == 10:
-        month_name = "October"
+        month_name = 'October'
     elif month == 11:
-        month_name = "November"
+        month_name = 'November'
     elif month == 12:
-        month_name = "December"
+        month_name = 'December'
 
-    basa_name = "%s_result.xlsx" % month_name
+    basa_name = '%s_result.xlsx' % month_name
     return basa_name
 
 
 if __name__ == '__main__':
-    # print(count_officials_sending(10))
-    print(count_officials_sending(10))
+    # print(count_officials_sending(2018, 10))
+    count_sending_and_receive(2018)

@@ -13,7 +13,7 @@ from pymongo import MongoClient
 
 dotenv.load_dotenv(verbose=True)
 today = datetime.date.today()
-register = Blueprint("register", __name__, url_prefix="/register")
+register = Blueprint('register', __name__, url_prefix='/register')
 
 
 def create_collection():
@@ -25,7 +25,7 @@ def create_collection():
 
 def update_data():
     now = datetime.datetime.now()
-    last_update = "%d/%d/%d" % (now.year, now.month, now.day)
+    last_update = '%d/%d/%d' % (now.year, now.month, now.day)
     create_collection().insert_one({'last_update': True, 'body': last_update})
 
 
@@ -47,7 +47,7 @@ def insert_all_month():
     thread_1 = threading.Thread(target=insert_all_month_threading)
     thread_1.start()
     update_data()
-    print("updated")
+    print('updated')
     return redirect('/')
 
 
@@ -99,7 +99,7 @@ def get_csv(session,year=None, month=None):
     month = month or today.month - 1
     year = year or 2018
     datasheet = os.environ.get('DATA_URL')
-    base_calender = "%s/%d" % (year, month)
+    base_calender = '%s/%d' % (year, month)
     date_from = '%s/01' % base_calender
     print(date_from)
     _, end_month = calendar.monthrange(year, month)
@@ -120,5 +120,5 @@ def get_csv(session,year=None, month=None):
 
 if __name__ == '__main__':
     print('start')
-    # insert_monthly_record("10")
+    # insert_monthly_record('10')
     print('end')

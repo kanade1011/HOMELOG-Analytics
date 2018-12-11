@@ -6,9 +6,9 @@ import officials
 from services import result_creater, processor
 import badgelist
 
-view = Blueprint("view", __name__, url_prefix="/")
+view = Blueprint('view', __name__, url_prefix='/')
 today = datetime.date.today()
-users = os.environ.get("ADMIN")
+users = os.environ.get('ADMIN')
 month_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 
@@ -17,7 +17,7 @@ def create_data_list():
     year_list = [2017, 2018, 2019]
     for year in year_list:
         for month in month_list:
-            data_list.append("%d/%d" % (year, month))
+            data_list.append('%d/%d' % (year, month))
     return data_list
 
 
@@ -40,6 +40,18 @@ def view_index():
         last_updated=u_data)
 
 
+@view.route('/analytics/18_mvp')
+def view_sender_and_receiver(year=None):
+    year = 2018
+    start_month = request.args.get('month')
+    start_month = start_month[5::]
+    fin_month = request.args.get('fin-month')
+    fin_month = fin_month[5::]
+    results = processor.count_sending_and_receive(year)
+    print(results)
+    return render_template('month_summary.html', result=results, year=year)
+
+
 @view.route('/result/<year>/<specified_month>')
 def view_month_summary(year=None, specified_month=None):
     month = specified_month or '%s' % (today.month - 1)
@@ -52,7 +64,7 @@ def view_month_summary(year=None, specified_month=None):
 @view.route('/result/all')
 def view_all_summary():
     result = result_creater.all_person_record_getter()
-    print("result is :%s" % result)
+    print('result is :%s' % result)
     return render_template('all_summary.html', result=result, year=month_list)
 
 
@@ -90,7 +102,7 @@ def download_monthly_data(data):
     month = data[5::]
     print(month)
     result = result_creater.monthly_data_getter(year, month)
-    print("downloaded: %s" % result)
+    print('downloaded: %s' % result)
     index = []
     counter = []
     for buffer in result:
@@ -111,4 +123,5 @@ if __name__ == '__main__':
     # view_personal_sending()
     # view_all_summary()
     # view_personal_sending()
-    download_monthly_data(10)
+    # download_monthly_data(10)
+    view_sender_and_receiver(year=2018)
