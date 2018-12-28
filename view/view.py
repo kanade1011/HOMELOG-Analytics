@@ -3,6 +3,7 @@ import os
 import datetime
 import pandas
 import officials
+import services.result_creater
 from services import result_creater, processor
 import badgelist
 
@@ -26,7 +27,7 @@ def view_index():
     title = 'homelog analytics'
     official_list = officials.namelist
     badge_list = badgelist.badge_list
-    updated = processor.get_update_data()
+    updated = services.result_creater.get_update_data()
     try:
         u_date = updated['body']
     except:
@@ -47,9 +48,9 @@ def view_sender_and_receiver(year=None):
     start_month = start_month[5::]
     fin_month = request.args.get('fin-month')
     fin_month = fin_month[5::]
-    results = processor.count_sending_and_receive(year)
+    results = processor.mvp_analyze(year, start_month, fin_month)
     print(results)
-    return render_template('month_summary.html', result=results, year=year)
+    return render_template('mvp_analytics.html', result=results, year=year, start_month=start_month, fin_month=fin_month)
 
 
 @view.route('/result/<year>/<specified_month>')
@@ -85,7 +86,7 @@ def view_sender_receiver_badgekind():
     month = data[5::]
     print(month)
     badge = request.args.get('badge')
-    result = result_creater.badgekind_getter(year, month, badge)
+    result = processor.badgekind_getter(year, month, badge)
     print(result)
     return render_template(
         'badgekind_summary.html',

@@ -1,14 +1,19 @@
+import os
+from pymongo import MongoClient
 import officials
 from services import processor
 
 
-def badgekind_getter(year, month, badge_name):
-    record = processor.result_getter(year, month)
-    reslut_list = []
-    for row in record:
-        if row['贈ったバッジ'] == badge_name:
-            reslut_list.append(row)
-    return reslut_list
+def create_collection():
+    MONGO_URL = os.environ.get('MONGOHQ_URL')
+    if MONGO_URL:
+        client = MongoClient(MONGO_URL)
+        db = client['analytic_database']
+    else:
+        client = MongoClient('localhost', 27017)
+        db = client['analytic_database']
+    collection = db['analytic_database']
+    return collection
 
 
 def monthly_data_getter(year, month):
@@ -71,3 +76,14 @@ def all_person_record_getter():
 
 if __name__ == '__main__':
     all_person_record_getter()
+
+
+def result_getter(year, month):
+    record = create_collection().find_one({'y-month': '%s/%s' % (year, month)})
+    return record['body']
+
+
+def get_update_data():
+    last_updated = create_collection().find_one({'last_update': True})
+    print(last_updated)
+    return last_updated

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+      <title>{{ title }}</title>
+  </head>
+  <body>
+  {% block content %}
+    <div class="form">
+      <div class="container">
+        <span>{{year}}年{{start_month}}~{{fin_month}}月の送受信数</span>
+        <table>
+          <tr>
+            <th>Name</th><th>Total</th><th>Sending</th><th>Receiving</th>
+          </tr>
+        {% for person in result %}
+          <tr>
+            <td>{{person.name}}</td><td>{{person.total}}</td><td>{{person.sending}}</td><td>{{person.receiving}}</td>
+          </tr>
+        {% endfor %}
+        </table>
+      </div>
+      <a href="/">home</a>
+    </div>
+    {% endblock %}
+  </body>
+</html>

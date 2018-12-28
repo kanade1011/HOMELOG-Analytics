@@ -1,63 +1,60 @@
-import os
-from pymongo import MongoClient
 import numpy
 from collections import Counter
 import officials
+from services import result_creater
 
 
-def create_collection():
-    MONGO_URL = os.environ.get('MONGOHQ_URL')
-    if MONGO_URL:
-        client = MongoClient(MONGO_URL)
-        db = client['analytic_database']
-    else:
-        client = MongoClient('localhost', 27017)
-        db = client['analytic_database']
-    collection = db['analytic_database']
-    return collection
-
-
-def result_getter(year, month):
-    record = create_collection().find_one({'y-month': '%s/%s' % (year, month)})
-    return record['body']
-
-
-def get_update_data():
-    last_updated = create_collection().find_one({'last_update': True})
-    print(last_updated)
-    return last_updated
-
-
-def _get_specific_monthly(year):
+def _get_name_list_sending_or_receiving(year, analytic_kind, start_month, fin_month):
     results = []
-    months = [7, 8, 9, 10, 11]
+    months = []
+    kind = ''
+
+    for index in range(fin_month-start_month+1):
+        months.append(start_month)
+        start_month += 1
+    print("months: %s" % months)
+
+    if analytic_kind == "sending":
+        kind = '送信者名'
+    elif analytic_kind == 'receiving':
+        kind = '受信者名'
     for month in months:
-        print(month)
-        result = result_getter(year, month)
+        result = result_creater.result_getter(year, month)
         for badge in result:
-            results.append(badge['送信者名'])
-            results.append(badge['受信者名'])
-        print('%d result: %s' % (month,results))
-        print('%d end' % month)
-    print('get_specific_monthly return: %s' % results)
+            results.append(badge[kind])
+    print('get_name_list_sending_or_receiving return: %s\nkind: %s' % (results, analytic_kind))
     return results
 
 
-def count_sending_and_receive(year):
-    results = _get_specific_monthly(year)
+def mvp_analyze(year, start_month, fin_month):
+    sender_list = count_badge_number(year, 'sending', start_month, fin_month)
+    receiver_list = count_badge_number(year, 'receiving', start_month, fin_month)
+    sending_and_receiving_list = []
+    for sender in sender_list:
+        for receiver in receiver_list:
+            if sender['name'] == receiver['name']:
+                sender['receiving'] = receiver['receiving']
+                sender['total'] = int(receiver['receiving'])+int(sender['sending'])
+                sending_and_receiving_list.append(sender)
+    print("mvp_analyzer return %s" % sending_and_receiving_list)
+    return sending_and_receiving_list
+
+
+def count_badge_number(year, analytic_kind, start_month, fin_month):
+    results = _get_name_list_sending_or_receiving(year, analytic_kind, int(start_month), int(fin_month))
     counter = Counter(results)
-    sender_and_receiver_list = []
+    conter_list = []
     for word, cnt in counter.most_common():
-        sender_and_receiver_dict = {}
-        sender_and_receiver_dict['name'] = word
-        sender_and_receiver_dict['count'] = cnt
-        sender_and_receiver_list.append(sender_and_receiver_dict)
-    print('count_sending_and_receive return: %s' % sender_and_receiver_list)
-    return sender_and_receiver_list
+        conter_dict = {}
+        conter_dict['name'] = word
+        conter_dict[analytic_kind] = cnt
+        conter_list.append(conter_dict)
+    print('count_badgenumber return: %s \nkind: %s' % (conter_list, analytic_kind))
+    return conter_list
 
 
 def create_sender_dict(year, month):
-    data = result_getter(year, month)
+    data = result_creater.result_getter(year, month)
     sender = []
     # print(data)
     for rec in data:
@@ -72,7 +69,7 @@ def create_sender_dict(year, month):
 
 
 def extract_sender_receiver_badgekind(year, month):
-    sending_list = result_getter(year, month)
+    sending_list = result_creater.result_getter(year, month)
     sender_receiver_badgekind_list = []
     for row in sending_list:
         temp_dict = {}
@@ -133,6 +130,16 @@ def create_filename(month):
     return basa_name
 
 
+def badgekind_getter(year, month, badge_name):
+    record = result_creater.result_getter(year, month)
+    reslut_list = []
+    for row in record:
+        if row['贈ったバッジ'] == badge_name:
+            reslut_list.append(row)
+    return reslut_list
+
+
 if __name__ == '__main__':
     # print(count_officials_sending(2018, 10))
-    count_sending_and_receive(2018)
+    # count_sending(2018)
+    mvp_analyze(2018, 7, 11)
