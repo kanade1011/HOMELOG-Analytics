@@ -102,20 +102,7 @@ def download_monthly_data(data):
     print(year)
     month = data[5::]
     print(month)
-    result = result_creater.monthly_data_getter(year, month)
-    print('downloaded: %s' % result)
-    index = []
-    counter = []
-    for buffer in result:
-        index.append(buffer['name'])
-        counter.append(buffer['count'])
-    # print(index)
-    df = pandas.DataFrame(counter, index=index)
-    base_dir = os.getcwd()
-    filename = processor.create_filename(month)
-    data_dir = os.path.join(base_dir, 'Data', filename)
-    # print(data_dir)
-    df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
+    processor.download_monthly_sheet(year, month)
     return redirect('/')
 
 

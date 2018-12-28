@@ -1,3 +1,5 @@
+import os
+import pandas
 import numpy
 from collections import Counter
 import officials
@@ -5,8 +7,8 @@ from services import result_creater
 
 
 def _get_name_list_sending_or_receiving(year, analytic_kind, start_month, fin_month):
-    results = []
-    months = []
+    results = list()
+    months = list()
     kind = ''
 
     for index in range(fin_month-start_month+1):
@@ -29,7 +31,7 @@ def _get_name_list_sending_or_receiving(year, analytic_kind, start_month, fin_mo
 def mvp_analyze(year, start_month, fin_month):
     sender_list = count_badge_number(year, 'sending', start_month, fin_month)
     receiver_list = count_badge_number(year, 'receiving', start_month, fin_month)
-    sending_and_receiving_list = []
+    sending_and_receiving_list = list()
     for sender in sender_list:
         for receiver in receiver_list:
             if sender['name'] == receiver['name']:
@@ -43,25 +45,25 @@ def mvp_analyze(year, start_month, fin_month):
 def count_badge_number(year, analytic_kind, start_month, fin_month):
     results = _get_name_list_sending_or_receiving(year, analytic_kind, int(start_month), int(fin_month))
     counter = Counter(results)
-    conter_list = []
+    counter_list = list()
     for word, cnt in counter.most_common():
-        conter_dict = {}
-        conter_dict['name'] = word
-        conter_dict[analytic_kind] = cnt
-        conter_list.append(conter_dict)
-    print('count_badgenumber return: %s \nkind: %s' % (conter_list, analytic_kind))
-    return conter_list
+        counter_dict = dict()
+        counter_dict['name'] = word
+        counter_dict[analytic_kind] = cnt
+        counter_list.append(counter_dict)
+    print('count_badgenumber return: %s \nkind: %s' % (counter_list, analytic_kind))
+    return counter_list
 
 
 def create_sender_dict(year, month):
     data = result_creater.result_getter(year, month)
-    sender = []
+    sender = list()
     # print(data)
     for rec in data:
         sender.append(rec['送信者名'])
     processed_list = numpy.ravel(sender)
     counter = Counter(processed_list)
-    sender_dict = {}
+    sender_dict = dict()
     for word, cnt in counter.most_common():
         sender_dict[word] = cnt
     # print(sender_dict)
@@ -70,9 +72,9 @@ def create_sender_dict(year, month):
 
 def extract_sender_receiver_badgekind(year, month):
     sending_list = result_creater.result_getter(year, month)
-    sender_receiver_badgekind_list = []
+    sender_receiver_badgekind_list = list()
     for row in sending_list:
-        temp_dict = {}
+        temp_dict = dict()
         temp_dict['送信者名'] = row['送信者名']
         temp_dict['受信者名'] = row['受信者名']
         temp_dict['贈ったバッジ'] = row['贈ったバッジ']
@@ -84,9 +86,9 @@ def extract_sender_receiver_badgekind(year, month):
 def count_officials_sending(year, month):
     sender_dict = create_sender_dict(year, month)
     official_list = officials.namelist
-    officials_send_count_list = []
+    officials_send_count_list = list()
     for person in official_list:
-        tmp = {}
+        tmp = dict()
         try:
             tmp['name'] = person
             tmp['count'] = sender_dict[person]
@@ -126,8 +128,24 @@ def create_filename(month):
     elif month == 12:
         month_name = 'December'
 
-    basa_name = '%s_result.xlsx' % month_name
-    return basa_name
+    base_name = '%s_result.xlsx' % month_name
+    return base_name
+
+
+def download_monthly_sheet(year, month):
+    result = result_creater.monthly_data_getter(year, month)
+    print('downloaded: %s' % result)
+    index = []
+    counter = []
+    for buffer in result:
+        index.append(buffer['name'])
+        counter.append(buffer['count'])
+    # print(index)
+    df = pandas.DataFrame(counter, index=index)
+    filename = create_filename(month)
+    data_dir = os.path.join(os.getcwd(), 'Data', filename)
+    # print(data_dir)
+    df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
 
 
 def badgekind_getter(year, month, badge_name):
