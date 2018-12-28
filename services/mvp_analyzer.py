@@ -13,6 +13,8 @@ def mvp_analyze(year, start_month, fin_month):
                 sender['total'] = int(receiver['receiving'])+int(sender['sending'])
                 sending_and_receiving_list.append(sender)
     print("mvp_analyzer return %s" % sending_and_receiving_list)
+    sending_and_receiving_list.sort(key=lambda x: x['total'])
+    sending_and_receiving_list.reverse()
     return sending_and_receiving_list
 
 
