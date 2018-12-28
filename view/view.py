@@ -48,6 +48,7 @@ def view_sender_and_receiver(year=None):
     fin_month = request.args.get('fin-month')
     fin_month = fin_month[5::]
     results = mvp_analyzer.mvp_analyze(year, start_month, fin_month)
+    downloader.download_4q_mvp_analytics(results)
     print(results)
     return render_template('mvp_analytics.html', result=results, year=year, start_month=start_month, fin_month=fin_month)
 

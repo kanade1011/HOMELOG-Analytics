@@ -59,6 +59,4 @@ def badgekind_getter(year, month, badge_name):
 
 
 if __name__ == '__main__':
-    # print(count_officials_sending(2018, 10))
-    # count_sending(2018)
-    mvp_analyze(2018, 7, 11)
+    pass
