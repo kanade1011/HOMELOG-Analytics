@@ -1,10 +1,9 @@
 from flask import Blueprint, render_template, request, redirect
 import os
 import datetime
-import pandas
 import officials
 import services.result_creater
-from services import result_creater, processor
+from services import result_creater, processor, downloader, mvp_analyzer
 import badgelist
 
 view = Blueprint('view', __name__, url_prefix='/')
@@ -48,7 +47,7 @@ def view_sender_and_receiver(year=None):
     start_month = start_month[5::]
     fin_month = request.args.get('fin-month')
     fin_month = fin_month[5::]
-    results = processor.mvp_analyze(year, start_month, fin_month)
+    results = mvp_analyzer.mvp_analyze(year, start_month, fin_month)
     print(results)
     return render_template('mvp_analytics.html', result=results, year=year, start_month=start_month, fin_month=fin_month)
 
@@ -102,7 +101,7 @@ def download_monthly_data(data):
     print(year)
     month = data[5::]
     print(month)
-    processor.download_monthly_sheet(year, month)
+    downloader.download_monthly_sheet(year, month)
     return redirect('/')
 
 

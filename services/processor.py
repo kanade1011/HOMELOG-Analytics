@@ -1,58 +1,7 @@
-import os
-import pandas
 import numpy
 from collections import Counter
 import officials
 from services import result_creater
-
-
-def _get_name_list_sending_or_receiving(year, analytic_kind, start_month, fin_month):
-    results = list()
-    months = list()
-    kind = ''
-
-    for index in range(fin_month-start_month+1):
-        months.append(start_month)
-        start_month += 1
-    print("months: %s" % months)
-
-    if analytic_kind == "sending":
-        kind = '送信者名'
-    elif analytic_kind == 'receiving':
-        kind = '受信者名'
-    for month in months:
-        result = result_creater.result_getter(year, month)
-        for badge in result:
-            results.append(badge[kind])
-    print('get_name_list_sending_or_receiving return: %s\nkind: %s' % (results, analytic_kind))
-    return results
-
-
-def mvp_analyze(year, start_month, fin_month):
-    sender_list = count_badge_number(year, 'sending', start_month, fin_month)
-    receiver_list = count_badge_number(year, 'receiving', start_month, fin_month)
-    sending_and_receiving_list = list()
-    for sender in sender_list:
-        for receiver in receiver_list:
-            if sender['name'] == receiver['name']:
-                sender['receiving'] = receiver['receiving']
-                sender['total'] = int(receiver['receiving'])+int(sender['sending'])
-                sending_and_receiving_list.append(sender)
-    print("mvp_analyzer return %s" % sending_and_receiving_list)
-    return sending_and_receiving_list
-
-
-def count_badge_number(year, analytic_kind, start_month, fin_month):
-    results = _get_name_list_sending_or_receiving(year, analytic_kind, int(start_month), int(fin_month))
-    counter = Counter(results)
-    counter_list = list()
-    for word, cnt in counter.most_common():
-        counter_dict = dict()
-        counter_dict['name'] = word
-        counter_dict[analytic_kind] = cnt
-        counter_list.append(counter_dict)
-    print('count_badgenumber return: %s \nkind: %s' % (counter_list, analytic_kind))
-    return counter_list
 
 
 def create_sender_dict(year, month):
@@ -73,12 +22,12 @@ def create_sender_dict(year, month):
 def extract_sender_receiver_badgekind(year, month):
     sending_list = result_creater.result_getter(year, month)
     sender_receiver_badgekind_list = list()
-    for row in sending_list:
+    for sending in sending_list:
         temp_dict = dict()
-        temp_dict['送信者名'] = row['送信者名']
-        temp_dict['受信者名'] = row['受信者名']
-        temp_dict['贈ったバッジ'] = row['贈ったバッジ']
-        temp_dict['メッセージ'] = row['メッセージ']
+        temp_dict['送信者名'] = sending['送信者名']
+        temp_dict['受信者名'] = sending['受信者名']
+        temp_dict['贈ったバッジ'] = sending['贈ったバッジ']
+        temp_dict['メッセージ'] = sending['メッセージ']
         sender_receiver_badgekind_list.append(temp_dict)
     return sender_receiver_badgekind_list
 
@@ -98,54 +47,6 @@ def count_officials_sending(year, month):
             tmp['count'] = 0
             officials_send_count_list.append(tmp)
     return officials_send_count_list
-
-
-def create_filename(month):
-    month = int(month)
-    month_name = ''
-    if month == 1:
-        month_name = 'January'
-    elif month == 2:
-        month_name = 'February'
-    elif month == 3:
-        month_name = 'March'
-    elif month == 4:
-        month_name = 'April'
-    elif month == 5:
-        month_name = 'May'
-    elif month == 6:
-        month_name = 'June'
-    elif month == 7:
-        month_name = 'July'
-    elif month == 8:
-        month_name = 'August'
-    elif month == 9:
-        month_name = 'September'
-    elif month == 10:
-        month_name = 'October'
-    elif month == 11:
-        month_name = 'November'
-    elif month == 12:
-        month_name = 'December'
-
-    base_name = '%s_result.xlsx' % month_name
-    return base_name
-
-
-def download_monthly_sheet(year, month):
-    result = result_creater.monthly_data_getter(year, month)
-    print('downloaded: %s' % result)
-    index = []
-    counter = []
-    for buffer in result:
-        index.append(buffer['name'])
-        counter.append(buffer['count'])
-    # print(index)
-    df = pandas.DataFrame(counter, index=index)
-    filename = create_filename(month)
-    data_dir = os.path.join(os.getcwd(), 'Data', filename)
-    # print(data_dir)
-    df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
 
 
 def badgekind_getter(year, month, badge_name):
