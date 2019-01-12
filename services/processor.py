@@ -58,5 +58,14 @@ def badgekind_getter(year, month, badge_name):
     return reslut_list
 
 
+def type_check_send_or_receive(type):
+    if type == 'sending':
+        result_type = '送信者名'
+        return result_type
+    elif type == 'receiving':
+        result_type = '受信者名'
+        return result_type
+
+
 if __name__ == '__main__':
     pass

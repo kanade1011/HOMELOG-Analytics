@@ -1,6 +1,6 @@
 import os
 import pandas
-from services import result_creater, util
+from services import result_creater, util, processor
 
 
 def download_monthly_sheet(year, month):
@@ -35,5 +35,22 @@ def download_4q_mvp_analytics(result):
                           index=name)
     # print("data:\n%s" % df)
     data_dir = os.path.join(os.getcwd(), 'Data', 'mvp_4Q_list.xlsx')
+    df.to_excel(data_dir, sheet_name='mvp_4Q_list', header=True)
+    print('download succeeded')
+
+
+def download_12th_mvp_analytics(result, badge, type):
+    result_type = processor.type_check_send_or_receive(type)
+    name = list()
+    receiving = list()
+    for buffer in result:
+        name.append(buffer['name'])
+        receiving.append(buffer['count'])
+    df = pandas.DataFrame({'receiving': receiving,
+                           'badge': badge,
+                           'type': result_type},
+                          index=name)
+    # print("data:\n%s" % df)
+    data_dir = os.path.join(os.getcwd(), 'Data', 'mvp_12th_list.xlsx')
     df.to_excel(data_dir, sheet_name='mvp_4Q_list', header=True)
     print('download succeeded')

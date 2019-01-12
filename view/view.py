@@ -27,6 +27,7 @@ def view_index():
     official_list = officials.namelist
     badge_list = badgelist.badge_list
     updated = services.result_creater.get_update_data()
+    type_list = ['sending', 'receiving']
     try:
         u_date = updated['body']
     except:
@@ -37,7 +38,7 @@ def view_index():
         list=official_list,
         year=create_data_list(),
         badge_list=badge_list,
-        last_updated=u_date)
+        last_updated=u_date, type_list=type_list)
 
 
 @view.route('/analytics/18_mvp')
@@ -51,6 +52,20 @@ def view_sender_and_receiver(year=None):
     downloader.download_4q_mvp_analytics(results)
     print(results)
     return render_template('mvp_analytics.html', result=results, year=year, start_month=start_month, fin_month=fin_month)
+
+
+@view.route('/analytics/12')
+def view_badge_and_receiver():
+    year = 2018
+    month = request.args.get('month')
+    month = month[5::]
+    badge = request.args.get('badge')
+    type = request.args.get('types')
+    print(request.args)
+    print('type: %s' % type)
+    results = mvp_analyzer.mvp_analyze2(year, month, badge, type)
+    downloader.download_12th_mvp_analytics(results, badge, type)
+    return render_template('badge_and_count.html', result=results, badge=badge, type=type)
 
 
 @view.route('/result/<year>/<specified_month>')
@@ -96,11 +111,9 @@ def view_sender_receiver_badgekind():
         count=len(result))
 
 
-@view.route('/download/<data>')
-def download_monthly_data(data):
-    year = data[:4]
+@view.route('/download/<year>/<month>')
+def download_monthly_data(year=None, month=None):
     print(year)
-    month = data[5::]
     print(month)
     downloader.download_monthly_sheet(year, month)
     return redirect('/')
