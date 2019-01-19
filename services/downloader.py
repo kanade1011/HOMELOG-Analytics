@@ -1,22 +1,24 @@
 import os
 import pandas
-from services import result_creater, util, processor
+from services import result_creater, util, processor, excel_writer
 
 
 def download_monthly_sheet(year, month):
     result = result_creater.monthly_data_getter(year, month)
-    print('downloaded: %s' % result)
-    index = list()
-    counter = list()
-    for buffer in result:
-        index.append(buffer['name'])
-        counter.append(buffer['count'])
-    # print(index)
-    df = pandas.DataFrame(counter, index=index)
-    filename = util.create_filename(month)
-    data_dir = os.path.join(os.getcwd(), 'Data', filename)
-    # print(data_dir)
-    df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
+    # print(result)
+    excel_writer.write_to_sheet(result, month)
+    # print('downloaded: %s' % result)
+    # index = list()
+    # counter = list()
+    # for buffer in result:
+    #     index.append(buffer['name'])
+    #     counter.append(buffer['count'])
+    # # print(index)
+    # df = pandas.DataFrame(counter, index=index)
+    # filename = util.create_filename(month)
+    # data_dir = os.path.join(os.getcwd(), 'Data', filename)
+    # # print(data_dir)
+    # df.to_excel(data_dir, sheet_name='new_sheet_name', header=False)
 
 
 def download_4q_mvp_analytics(result):

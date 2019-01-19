@@ -65,7 +65,14 @@ def view_badge_and_receiver():
     print('type: %s' % type)
     results = mvp_analyzer.mvp_analyze2(year, month, badge, type)
     downloader.download_12th_mvp_analytics(results, badge, type)
-    return render_template('badge_and_count.html', result=results, badge=badge, type=type)
+    return render_template(
+        'badge_and_count.html',
+        result=results,
+        badge=badge,
+        type=type,
+        year=year,
+        month=month
+    )
 
 
 @view.route('/result/<year>/<specified_month>')
