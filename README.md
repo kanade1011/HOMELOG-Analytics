@@ -2,6 +2,7 @@
 [![CircleCI](https://circleci.com/gh/SHINJIR0/HOMELOG-Analytics/tree/master.svg?style=svg)](https://circleci.com/gh/SHINJIR0/HOMELOG-Analytics/tree/master)
 ## Usage
 
+- apply venv
 - run mongoDB by CLI.
 - At root directory, run  `python app.py`.
 - open browser `localhost:5000`.
